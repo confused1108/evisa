@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)https://indianvisaonline.gov.in/evisa/AdditionalQuestions -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <title>Online Indian Visa Form</title>
+        <noscript>
+        <meta http-equiv="refresh" content="0; URL=no_js.html">
+        </noscript>
+        <link href="./Indian e-Visa_files/Online_tvoa.css" rel="stylesheet" type="text/css">
+        <link href="./Indian e-Visa_files/jquery_theme_tvoa.css" rel="stylesheet" type="text/css">
+        <link rel="icon" href="https://indianvisaonline.gov.in/evisa/images/favicon.ico">
+        <link href="./Indian e-Visa_files/jquery-ui.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="./Indian e-Visa_files/jquery.js"></script>
+        <script type="text/javascript" src="./Indian e-Visa_files/jquery-ui.js"></script>
+        <title>Indian e-Visa</title>
+
+<noscript>
+<meta http-equiv="refresh" content="0; URL=no_js.html">
+</noscript>
+
+<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://localhost:8084/evisa/js/ https://localhost:8084/evisa/css/ , img-src 'self' data:;"/>
+-->
+
+
+<meta http-equiv="X-Frame-Options" content="deny">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<script type="text/javascript" src="./Indian e-Visa_files/jquery.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/jquery-ui.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/declarations.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/blur_functions.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/submit_functions.js"></script>
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/Online_tvoa.css">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery_theme_tvoa.css">
+<link rel="icon" href="https://indianvisaonline.gov.in/evisa/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery-ui.css">
+
+
+        
+        
+        <script>
+            $(document).ready(function () {
+                $('.answers').css('display', 'none');
+                load_additional_questions();
+
+            
+
+            
+
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_1').prop("checked", true);
+                
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_2').prop("checked", true);
+                
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_3').prop("checked", true);
+                
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_4').prop("checked", true);
+                
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_5').prop("checked", true);
+                
+            
+                                  
+
+                
+                                       
+                      $('#question_yes_6').prop("checked", true);
+                
+            
+            });
+            function showAnswer(quesId) {
+                $("#answer_" + quesId).css('display', '');
+                $("#answer_" + quesId).next().empty();
+                $("#answer_" + quesId).val('');
+            }
+            function hideAnswer(quesId) {
+                $("#answer_" + quesId).css('display', 'none');
+                $("#answer_" + quesId).val('');
+                $("#answer_" + quesId).next().empty();
+            }
+        </script>
+    </head>
+    <body onload="backButtonOverride()">  
+        <form method="post" action="https://indianvisaonline.gov.in/evisa/AdditionalQuestions" autocomplete="off" onsubmit="return validate_additional_questions();">
+            <div class="wrapper">
+                <div class="pageHeader"></div>
+                <div class="pageHeading1 text_center">
+                    Additional Question Details
+                    <a href="https://indianvisaonline.gov.in/evisa/tvoa.html"><img align="right" src="./Indian e-Visa_files/home.png" style=" width: 30px; height:26px;"></a>
+                </div>
+                <div class="text_left text_bold" style="font-size: 1.2em">
+                    <span>Please note down the Temporary Application ID :<span style="color:#d6262c"> 5X3AA858WBUSARB</span></span>
+                    <hr style="border:none;height:1px">
+                </div>
+                <div>
+                    <span>Your Information will be saved if you click save button or continue to next page. If you exit without doing either of that, your information will be lost.</span>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-11">Please provide below given details. Please give details if marked YES.</div>
+                    </div>
+                                       
+                    
+                    <br><br>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">1</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you ever been arrested/ prosecuted/ convicted by Court of Law of any country?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_1" style="width:auto;border: none" value="YES" name="radioName[1]" onclick="showAnswer(1)">Yes
+                                <input type="radio" id="question_no_1" style="width:auto;border: none" value="NO" name="radioName[1]" onclick="hideAnswer(1)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_1" class="answers" name="ansList[1]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">2</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you ever been refused entry / deported by any country including India?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_2" style="width:auto;border: none" value="YES" name="radioName[2]" onclick="showAnswer(2)">Yes
+                                <input type="radio" id="question_no_2" style="width:auto;border: none" value="NO" name="radioName[2]" onclick="hideAnswer(2)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_2" class="answers" name="ansList[2]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">3</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you ever been engaged in Human trafficking/ Drug trafficking/ Child abuse/ Crime against women/ Economic offense / Financial fraud?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_3" style="width:auto;border: none" value="YES" name="radioName[3]" onclick="showAnswer(3)">Yes
+                                <input type="radio" id="question_no_3" style="width:auto;border: none" value="NO" name="radioName[3]" onclick="hideAnswer(3)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_3" class="answers" name="ansList[3]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">4</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you ever been engaged in Cyber crime/ Terrorist activities/ Sabotage/ Espionage/ Genocide/ Political killing/ other act of violence?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_4" style="width:auto;border: none" value="YES" name="radioName[4]" onclick="showAnswer(4)">Yes
+                                <input type="radio" id="question_no_4" style="width:auto;border: none" value="NO" name="radioName[4]" onclick="hideAnswer(4)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_4" class="answers" name="ansList[4]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">5</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you ever by any means or medium, expressed views that justify or glorify terrorist violence or that may encourage others to terrorist acts or other serious criminal acts?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_5" style="width:auto;border: none" value="YES" name="radioName[5]" onclick="showAnswer(5)">Yes
+                                <input type="radio" id="question_no_5" style="width:auto;border: none" value="NO" name="radioName[5]" onclick="hideAnswer(5)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_5" class="answers" name="ansList[5]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                                                      
+                        <div class="row" style="min-height:60px">
+                            <div class="col-31" style="width:10%; text-align: center;">6</div>
+                            <div class="col-32 mandatory" style="width:31%;text-align: left;">Have you sought asylum (political or otherwise)in any country?</div>
+                            <div class="col-33 text-bold" style="width:15%;text-align: left;">       
+                                <input type="radio" id="question_yes_6" style="width:auto;border: none" value="YES" name="radioName[6]" onclick="showAnswer(6)">Yes
+                                <input type="radio" id="question_no_6" style="width:auto;border: none" value="NO" name="radioName[6]" onclick="hideAnswer(6)">No
+                                </div>
+                                <div class="col-41" style="width:20%;text-align: left">
+                                    <textarea placeholder="Please give details" id="answer_6" class="answers" name="ansList[6]" maxlength="200" cols="40" rows="3" style="resize: none; display: none;"></textarea>
+                                <span class="radioError error1" style="font-size: 11px"></span>
+                            </div>
+                        </div>
+                    
+
+                    <div class="row">
+                        <div class="col-11 text_left" style="background:white;margin-left:60px;width:80%">
+                            <input type="checkbox" id="verifyQuestions" style="width:auto;text-align: center;"> 
+                            I <b><i>QWED</i></b>, hereby declare that the information furnished
+                            above is correct to the best of my knowledge and belief. in case the 
+                            information is found false at any stage, I am liable for legal
+                            action/deportation/blacklisting or any other action as deemed fit by the
+                            Government of India.<br>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11 text_center">
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="continue" value="Save and Continue">
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="exit" value="Save and Temporarily Exit" title="Save and Register Later">
+                        </div>
+                    </div>
+                </div><!-- end of wrapper -->
+            </div>
+            <input type="hidden" name="token" value="8f1ab393-2443-4229-a9c1-25715a34178e">
+        </form>
+    
+
+</body></html>

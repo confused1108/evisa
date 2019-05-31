@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://indianvisaonline.gov.in/evisa/Registration -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">               
+        <title>evisa</title>
+
+<noscript>
+<meta http-equiv="refresh" content="0; URL=no_js.html">
+</noscript>
+
+<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://localhost:8084/evisa/js/ https://localhost:8084/evisa/css/ , img-src 'self' data:;"/>
+-->
+
+
+<meta http-equiv="X-Frame-Options" content="deny">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<script type="text/javascript" src="./Indian e-Visa_files/jquery.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/jquery-ui.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/declarations.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/blur_functions.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/submit_functions.js"></script>
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/Online_tvoa.css">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery_theme_tvoa.css">
+<link rel="icon" href="https://indianvisaonline.gov.in/evisa/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery-ui.css">
+
+
+        
+        
+        <script>
+            function refreshCaptcha()
+            {
+                try
+                {
+                    var d = new Date();
+                    var n = d.getTime();
+                    document.getElementById("capt").src = "captcha?rand=" + n;
+                } catch (e)
+                {
+                    alert(e);
+                }
+                return false;
+            }
+
+            function image_loaded() {
+                var width = $('#capt').css('width');
+                $('#label1').html("");
+                $('#enter_code').html("Please enter above text");
+            }
+
+            $(function () {
+                $("#tabs").tabs({
+                    collapsible: true
+                });
+            });
+            window.onload = function () {
+                document.onkeydown = function (e) {
+                    return (e.which || e.keyCode) != 116;
+                }
+            }
+
+            function preventPaste() {
+                var myInput = document.getElementById('email_id');
+                myInput.onpaste = function (e) {
+                    e.preventDefault();
+                }
+                myInput = document.getElementById('email_re_id');
+                myInput.onpaste = function (e) {
+                    e.preventDefault();
+                }
+            }
+            //evisa_combination_not_allowed_master
+            function show_hide_purpose(var_ref, visa_ser_id) {
+
+                if (var_ref.is(':checked')) {
+                    if (verify_allowed_combination() == false) {
+                        alert("Please select different service combination.");
+                        var_ref.prop('checked', false);
+                        return;
+                    } else {
+                        $('.purpose_row_' + visa_ser_id).css('display', 'block');
+                        alert("All the following activities are permitted, however select the primarily purpose from the following");
+                    }
+                } else {
+                    $('.purpose_row_' + visa_ser_id).css('display', 'none');
+                    $('.evisa_purpose_' + visa_ser_id).prop('checked', false);
+                    //clear the values
+                    $('#purpose_' + visa_ser_id).val('');
+
+                }
+            }
+
+            function verify_allowed_combination() {
+                var ticked_services = [];
+                var result_set = [];
+                $('input[name=evisa_service]').each(function () {
+                    if ($(this).is(':checked')) {
+                        ticked_services.push(parseInt($(this).val()));
+                    }
+                });
+                if (ticked_services.length > 1) {
+                    result_set = subset(ticked_services, 2);
+                }
+
+                for (var j = 0; j < result_set.length; j++) {
+                    if (result_set[j].length == 2) {
+                      //  console.log(result_set);
+                        if (compare_four_values(result_set[j]) == false) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            function compare_four_values(arr) {
+                // console.log("for arr now arr[0]= " + arr[0] + " and arr[1]=" + arr[1]);
+            
+                // console.log("visa1="+16+" visa2="+13);
+                if ((16 == arr[0] && 13 == arr[1])
+                        || (13 == arr[0] && 16 == arr[1])) {
+                    return false;
+                }
+            
+                // console.log("visa1="+4+" visa2="+13);
+                if ((4 == arr[0] && 13 == arr[1])
+                        || (13 == arr[0] && 4 == arr[1])) {
+                    return false;
+                }
+            
+                // console.log("visa1="+4+" visa2="+1);
+                if ((4 == arr[0] && 1 == arr[1])
+                        || (1 == arr[0] && 4 == arr[1])) {
+                    return false;
+                }
+            
+                // console.log("visa1="+4+" visa2="+16);
+                if ((4 == arr[0] && 16 == arr[1])
+                        || (16 == arr[0] && 4 == arr[1])) {
+                    return false;
+                }
+            
+            }
+
+
+            function assign_purpose(visa_ser_id, purpose_code) {
+                $('#purpose_' + visa_ser_id).val(purpose_code);
+            }
+            function assign_all_purpose() {
+                var fnal_pur = "";
+                $('[id^="purpose_"]').each(function () {
+                    if ($(this).val() != '') {
+                        if (fnal_pur != "")
+                            fnal_pur = fnal_pur + "," + $(this).val();
+                        else
+                            fnal_pur = $(this).val();
+                    }
+                });
+                $('#evisa_purpose').val(fnal_pur);
+
+            }
+            function submit_registration_form() {
+                assign_all_purpose();
+                var submit_result = validate_registration_form(3);
+                if (submit_result == true) {
+                    fetch_document_list();
+                    //return true;
+                } else {
+
+                    return false;
+                }
+            }
+
+            function check_ppt_type() {
+                var ppt_selected = $('#ppt_type_id').val();
+                if (ppt_selected != 1) {
+                    alert("Only ordinary passport holders are allowed for evisa service. You may approach concerned Indian Mission abroad.");
+                    window.location = "tvoa.html";
+                }
+            }
+        </script>
+        <style>
+            #form_info{
+                display:none;
+                position: fixed;
+                margin:0 auto;
+                top: 1%;
+                left: 50%;	
+                margin-left: -25%;	
+                width: 50%;
+                height: 50%;               
+                filter:alpha(opacity=50);
+                -moz-opacity:0.5;
+                -khtml-opacity: 0.5;
+                opacity: 1;
+                z-index: 10000;
+            }
+            #overlay{
+                width:100%;
+                height:100%;position: fixed;
+                z-index:0;
+                top: 0;
+                left:0;
+                background:rgba(0,0,0,0.5);
+            }
+            ul.form_info_list {
+                font-weight: bold;
+            }
+            ul.form_info_list li {
+                font-weight: normal;
+            }
+            .know_req_info_span{
+                color:#2080c9;
+                font-size: 1.1em;
+                cursor:pointer;
+            }
+            ul.errorMessage li{
+                list-style-type: none;
+                color:red;
+            }
+        </style>        
+    </head>
+    <body onload="backButtonOverride();
+            preventPaste();">           
+        <br>
+        <form method="post" action="https://indianvisaonline.gov.in/evisa/Registration" id="Registration_form" autocomplete="off">  
+            <!--  <form  method="post" action="Registration" autocomplete="off" onsubmit="return validate_registration_form(3);"> -->
+            <div class="wrapper">
+                <div class="pageHeader"></div> 
+                <div class="pageHeading1 text_center">
+                    e-Visa Application
+                    <a href="https://indianvisaonline.gov.in/evisa/tvoa.html"><img align="right" src="./Indian e-Visa_files/home.png" style=" width: 30px; height:26px;"></a>
+                </div>
+                <div class="container">
+                    <div class="form_container"> 
+                        <div class="row">                             
+                            <div class="col-1 mandatory" title="Passport Type" id="passport_type">Passport Type</div>
+                            <div class="col-2">
+                                
+                                <select name="appl.ppt_type_id" id="ppt_type_id" onchange="check_ppt_type()">
+                                    <option value="">Select Passport Type</option>
+                                    
+                                        <option value="1">ORDINARY PASSPORT</option>
+                                    
+                                        <option value="2">OFFICIAL PASSPORT</option>
+                                    
+                                        <option value="3">DIPLOMATIC PASSPORT</option>
+                                    
+                                        <option value="7">SERVICE PASSPORT</option>
+                                    
+                                        <option value="8">SPECIAL PASSPORT</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="col-3"></div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory" title="Nationality" id="appl_nationality">Nationality</div>
+                            <div class="col-2">       
+                                
+                                <select name="appl.nationality" id="nationality_id" onchange="showNationalityPopup($(this).val())">
+                                    <option value="">Select Nationality</option>
+                                    
+                                        <option value="ALB">ALBANIA</option>
+                                    
+                                        <option value="AND">ANDORRA</option>
+                                    
+                                        <option value="AGO">ANGOLA</option>
+                                    
+                                        <option value="AIA">ANGUILLA</option>
+                                    
+                                        <option value="ATG">ANTIGUA AND BARBUDA</option>
+                                    
+                                        <option value="ARG">ARGENTINA</option>
+                                    
+                                        <option value="ARM">ARMENIA</option>
+                                    
+                                        <option value="ABW">ARUBA</option>
+                                    
+                                        <option value="AUS">AUSTRALIA</option>
+                                    
+                                        <option value="AUT">AUSTRIA</option>
+                                    
+                                        <option value="AZE">AZERBAIJAN</option>
+                                    
+                                        <option value="BHS">BAHAMAS</option>
+                                    
+                                        <option value="BRB">BARBADOS</option>
+                                    
+                                        <option value="BEL">BELGIUM</option>
+                                    
+                                        <option value="BLZ">BELIZE</option>
+                                    
+                                        <option value="BOL">BOLIVIA</option>
+                                    
+                                        <option value="BIH">BOSNIA AND HERZEGOVINA</option>
+                                    
+                                        <option value="BWA">BOTSWANA</option>
+                                    
+                                        <option value="BRA">BRAZIL</option>
+                                    
+                                        <option value="BRN">BRUNEI</option>
+                                    
+                                        <option value="BGR">BULGARIA</option>
+                                    
+                                        <option value="BDI">BURUNDI</option>
+                                    
+                                        <option value="KHM">CAMBODIA</option>
+                                    
+                                        <option value="CMR">CAMEROON</option>
+                                    
+                                        <option value="CAN">CANADA</option>
+                                    
+                                        <option value="CPV">CAPE VERDE</option>
+                                    
+                                        <option value="CYM">CAYMAN ISLANDS</option>
+                                    
+                                        <option value="CHL">CHILE</option>
+                                    
+                                        <option value="CHN">CHINA-CHINA</option>
+                                    
+                                        <option value="HKG">CHINA- SAR HONGKONG</option>
+                                    
+                                        <option value="MAC">CHINA- SAR MACAU</option>
+                                    
+                                        <option value="COL">COLOMBIA</option>
+                                    
+                                        <option value="COM">COMOROS</option>
+                                    
+                                        <option value="COK">COOK ISLANDS</option>
+                                    
+                                        <option value="CRI">COSTA RICA</option>
+                                    
+                                        <option value="CIV">COTE D\'IVOIRE</option>
+                                    
+                                        <option value="HRV">CROATIA</option>
+                                    
+                                        <option value="CUB">CUBA</option>
+                                    
+                                        <option value="CYP">CYPRUS</option>
+                                    
+                                        <option value="CZE">CZECH REPUBLIC</option>
+                                    
+                                        <option value="DNK">DENMARK</option>
+                                    
+                                        <option value="DJI">DJIBOUTI</option>
+                                    
+                                        <option value="DMA">DOMINICA</option>
+                                    
+                                        <option value="DOM">DOMINICAN REPUBLIC</option>
+                                    
+                                        <option value="TLS">EAST TIMOR (DEMOCRATIC REPUBLIC OF)</option>
+                                    
+                                        <option value="ECU">ECUADOR</option>
+                                    
+                                        <option value="SLV">EL SALVADOR</option>
+                                    
+                                        <option value="ERI">ERITREA</option>
+                                    
+                                        <option value="EST">ESTONIA</option>
+                                    
+                                        <option value="FJI">FIJI</option>
+                                    
+                                        <option value="FIN">FINLAND</option>
+                                    
+                                        <option value="FRA">FRANCE</option>
+                                    
+                                        <option value="GAB">GABON</option>
+                                    
+                                        <option value="GMB">GAMBIA</option>
+                                    
+                                        <option value="GEO">GEORGIA</option>
+                                    
+                                        <option value="DEU">GERMANY</option>
+                                    
+                                        <option value="GHA">GHANA</option>
+                                    
+                                        <option value="GRC">GREECE</option>
+                                    
+                                        <option value="GRD">GRENADA</option>
+                                    
+                                        <option value="GTM">GUATEMALA</option>
+                                    
+                                        <option value="GIN">GUINEA</option>
+                                    
+                                        <option value="GUY">GUYANA</option>
+                                    
+                                        <option value="HTI">HAITI</option>
+                                    
+                                        <option value="HND">HONDURAS</option>
+                                    
+                                        <option value="HUN">HUNGARY</option>
+                                    
+                                        <option value="ISL">ICELAND</option>
+                                    
+                                        <option value="IDN">INDONESIA</option>
+                                    
+                                        <option value="IRN">IRAN</option>
+                                    
+                                        <option value="IRL">IRELAND</option>
+                                    
+                                        <option value="ISR">ISRAEL</option>
+                                    
+                                        <option value="ITA">ITALY</option>
+                                    
+                                        <option value="JAM">JAMAICA</option>
+                                    
+                                        <option value="JPN">JAPAN</option>
+                                    
+                                        <option value="JOR">JORDAN</option>
+                                    
+                                        <option value="KAZ">KAZAKHSTAN</option>
+                                    
+                                        <option value="KEN">KENYA</option>
+                                    
+                                        <option value="KIR">KIRIBATI</option>
+                                    
+                                        <option value="KGZ">KYRGYZSTAN</option>
+                                    
+                                        <option value="LAO">LAOS</option>
+                                    
+                                        <option value="LVA">LATVIA</option>
+                                    
+                                        <option value="LSO">LESOTHO</option>
+                                    
+                                        <option value="LBR">LIBERIA</option>
+                                    
+                                        <option value="LIE">LIECHTENSTEIN</option>
+                                    
+                                        <option value="LTU">LITHUANIA</option>
+                                    
+                                        <option value="LUX">LUXEMBOURG</option>
+                                    
+                                        <option value="MDG">MADAGASCAR</option>
+                                    
+                                        <option value="MWI">MALAWI</option>
+                                    
+                                        <option value="MYS">MALAYSIA</option>
+                                    
+                                        <option value="MLI">MALI</option>
+                                    
+                                        <option value="MLT">MALTA</option>
+                                    
+                                        <option value="MHL">MARSHALL ISLANDS</option>
+                                    
+                                        <option value="MUS">MAURITIUS</option>
+                                    
+                                        <option value="MEX">MEXICO</option>
+                                    
+                                        <option value="FSM">MICRONESIA (FEDERATED STATES OF)</option>
+                                    
+                                        <option value="MDA">MOLDOVA</option>
+                                    
+                                        <option value="MCO">MONACO</option>
+                                    
+                                        <option value="MNG">MONGOLIA</option>
+                                    
+                                        <option value="MNE">MONTENEGRO</option>
+                                    
+                                        <option value="MSR">MONTSERRAT</option>
+                                    
+                                        <option value="MOZ">MOZAMBIQUE</option>
+                                    
+                                        <option value="MMR">MYANMAR</option>
+                                    
+                                        <option value="NAM">NAMIBIA</option>
+                                    
+                                        <option value="NRU">NAURU</option>
+                                    
+                                        <option value="NLD">NETHERLANDS</option>
+                                    
+                                        <option value="NZL">NEW ZEALAND</option>
+                                    
+                                        <option value="NIC">NICARAGUA</option>
+                                    
+                                        <option value="NER">NIGER</option>
+                                    
+                                        <option value="NIU">NIUE ISLAND</option>
+                                    
+                                        <option value="NOR">NORWAY</option>
+                                    
+                                        <option value="OMN">OMAN</option>
+                                    
+                                        <option value="PLW">PALAU</option>
+                                    
+                                        <option value="PSE">PALESTINE</option>
+                                    
+                                        <option value="PAN">PANAMA</option>
+                                    
+                                        <option value="PNG">PAPUA NEW GUINEA</option>
+                                    
+                                        <option value="PRY">PARAGUAY</option>
+                                    
+                                        <option value="PER">PERU</option>
+                                    
+                                        <option value="PHL">PHILIPPINES</option>
+                                    
+                                        <option value="POL">POLAND</option>
+                                    
+                                        <option value="PRT">PORTUGAL</option>
+                                    
+                                        <option value="QAT">QATAR</option>
+                                    
+                                        <option value="KOR">REPUBLIC OF KOREA</option>
+                                    
+                                        <option value="MKD">REPUBLIC OF MACEDONIA</option>
+                                    
+                                        <option value="ROU">ROMANIA</option>
+                                    
+                                        <option value="RUS">RUSSIAN FEDERATION</option>
+                                    
+                                        <option value="RWA">RWANDA</option>
+                                    
+                                        <option value="KNA">SAINT KITTS AND NEVIS</option>
+                                    
+                                        <option value="LCA">SAINT LUCIA</option>
+                                    
+                                        <option value="VCT">SAINT VINCENT AND THE GRENADINES</option>
+                                    
+                                        <option value="WSM">SAMOA</option>
+                                    
+                                        <option value="SMR">SAN MARINO</option>
+                                    
+                                        <option value="SEN">SENEGAL</option>
+                                    
+                                        <option value="SRB">SERBIA</option>
+                                    
+                                        <option value="SYC">SEYCHELLES</option>
+                                    
+                                        <option value="SLE">SIERRA LEONE</option>
+                                    
+                                        <option value="SGP">SINGAPORE</option>
+                                    
+                                        <option value="SVK">SLOVAKIA</option>
+                                    
+                                        <option value="SVN">SLOVENIA</option>
+                                    
+                                        <option value="SLB">SOLOMON ISLANDS</option>
+                                    
+                                        <option value="ZAF">SOUTH AFRICA</option>
+                                    
+                                        <option value="ESP">SPAIN</option>
+                                    
+                                        <option value="LKA">SRI LANKA</option>
+                                    
+                                        <option value="SUR">SURINAME</option>
+                                    
+                                        <option value="SWZ">SWAZILAND</option>
+                                    
+                                        <option value="SWE">SWEDEN</option>
+                                    
+                                        <option value="CHE">SWITZERLAND</option>
+                                    
+                                        <option value="TWN">TAIWAN</option>
+                                    
+                                        <option value="TJK">TAJIKISTAN</option>
+                                    
+                                        <option value="TZA">TANZANIA</option>
+                                    
+                                        <option value="THA">THAILAND</option>
+                                    
+                                        <option value="TON">TONGA</option>
+                                    
+                                        <option value="TTO">TRINIDAD AND TOBAGO</option>
+                                    
+                                        <option value="TCA">TURKS AND CAICOS ISL</option>
+                                    
+                                        <option value="TUV">TUVALU</option>
+                                    
+                                        <option value="UGA">UGANDA</option>
+                                    
+                                        <option value="UKR">UKRAINE</option>
+                                    
+                                        <option value="ARE">UNITED ARAB EMIRATES</option>
+                                    
+                                        <option value="GBR">UNITED KINGDOM</option>
+                                    
+                                        <option value="USA">UNITED STATES OF AMERICA</option>
+                                    
+                                        <option value="URY">URUGUAY</option>
+                                    
+                                        <option value="UZB">UZBEKISTAN</option>
+                                    
+                                        <option value="VUT">VANUATU</option>
+                                    
+                                        <option value="VAT">VATICAN CITY STATE ( HOLY SEE)</option>
+                                    
+                                        <option value="VEN">VENEZUELA</option>
+                                    
+                                        <option value="VNM">VIETNAM</option>
+                                    
+                                        <option value="ZMB">ZAMBIA</option>
+                                    
+                                        <option value="ZWE">ZIMBABWE</option>
+                                    
+                                </select>                                                                       
+                            </div>
+                            <div class="col-3"></div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory" title="Port Of Arrival" id="port_india">Port Of Arrival</div>
+                            <div class="col-2">     
+                                
+                                <select name="appl.missioncode" id="missioncode_id">
+                                    <option value="">Select Port Of Arrival</option>  
+                                                                                
+                                        <option value="I022">AHMEDABAD AIRPORT</option>
+                                                                                
+                                        <option value="I032">AMRITSAR AIRPORT</option>
+                                                                                
+                                        <option value="I096">BAGDOGRA AIRPORT</option>
+                                                                                
+                                        <option value="I085">BENGALURU AIRPORT</option>
+                                                                                
+                                        <option value="I084">BHUBANESHWAR AIRPORT</option>
+                                                                                
+                                        <option value="I010">CALICUT AIRPORT</option>
+                                                                                
+                                        <option value="I005">CHANDIGARH AIRPORT</option>
+                                                                                
+                                        <option value="I008">CHENNAI AIRPORT</option>
+                                                                                
+                                        <option value="I208">CHENNAI SEAPORT</option>
+                                                                                
+                                        <option value="I024">COCHIN AIRPORT</option>
+                                                                                
+                                        <option value="I224">COCHIN SEAPORT</option>
+                                                                                
+                                        <option value="I094">COIMBATORE AIRPORT</option>
+                                                                                
+                                        <option value="I004">DELHI AIRPORT</option>
+                                                                                
+                                        <option value="I012">GAYA AIRPORT</option>
+                                                                                
+                                        <option value="I033">GOA AIRPORT</option>
+                                                                                
+                                        <option value="I283">GOA SEAPORT</option>
+                                                                                
+                                        <option value="I019">GUWAHATI AIRPORT</option>
+                                                                                
+                                        <option value="I041">HYDERABAD AIRPORT</option>
+                                                                                
+                                        <option value="I006">JAIPUR AIRPORT</option>
+                                                                                
+                                        <option value="I002">KOLKATA AIRPORT</option>
+                                                                                
+                                        <option value="I021">LUCKNOW AIRPORT</option>
+                                                                                
+                                        <option value="I015">MADURAI AIRPORT</option>
+                                                                                
+                                        <option value="I092">MANGALORE AIRPORT</option>
+                                                                                
+                                        <option value="I293">MANGALORE SEAPORT</option>
+                                                                                
+                                        <option value="I001">MUMBAI AIRPORT</option>
+                                                                                
+                                        <option value="I201">MUMBAI SEAPORT</option>
+                                                                                
+                                        <option value="I016">NAGPUR AIRPORT</option>
+                                                                                
+                                        <option value="I077">PORTBLAIR AIRPORT</option>
+                                                                                
+                                        <option value="I026">PUNE AIRPORT</option>
+                                                                                
+                                        <option value="I003">TIRUCHIRAPALLI AIRPORT</option>
+                                                                                
+                                        <option value="I023">TRIVANDRUM AIRPORT</option>
+                                                                                
+                                        <option value="I007">VARANASI AIRPORT</option>
+                                                                                
+                                        <option value="I025">VISHAKHAPATNAM AIRPORT</option>
+                                    
+                                </select>                                                                       
+                            </div>
+                            <div class="col-3"></div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory " title="Date of Birth" id="appl_dob">Date of Birth</div>
+                            <div class="col-2">                              
+                                <input name="appl.birthdate" type="text" size="10" id="dob_id" value="" class="hasDatepicker"> 
+                            </div>
+                            <div class="col-3" id="dd_mm_yy_1" title="(DD/MM/YYYY)">(DD/MM/YYYY)</div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory" title="Email ID" id="appl_email_id">Email ID</div>
+                            <div class="col-2">                                    
+                                <input name="appl.email" type="text" size="50" maxlength="50" value="" id="email_id">                                                                
+                            </div>
+                            <div class="col-3">                          
+                            </div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory" title="Re-enter Email" id="re_email">Re-enter Email ID</div>
+                            <div class="col-2">
+                                <input name="appl.email_re" maxlength="50" value="" type="text" size="50" id="email_re_id">                           
+                            </div>
+                            <div class="col-3"></div> 
+                        </div>
+                        <div class="row"> 
+                            <div class="col-1 mandatory" title="Expected Date of Arrival" id="expected_arrival_date">Expected Date of Arrival</div>
+                            <div class="col-2">                                    
+                                <input name="appl.journeydate" type="text" size="10" id="jouryney_id" value="" class="hasDatepicker">                                                                    
+                            </div>
+                            <div class="col-3" id="dd_mm_yy_2" title="(DD/MM/YYYY)">(DD/MM/YYYY)</div> 
+                        </div>
+
+                                                    
+                            <div class="row">
+                                <div class="col-1 mandatory" title="Visa Type">Visa Service</div>
+                                    <div class="col-2"> 
+                                            <input type="checkbox" value="3" name="evisa_service" onchange="show_hide_purpose($(this),3)" id="visa_ser_id">eTOURIST VISA    <br>
+                                    </div>
+                                    <div class="col-3" id="evisa_ser_purpose_error">
+                                    </div>
+                                </div>
+
+                            
+                                
+                                    <div class="row purpose_row_3" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_3" value="21" class="evisa_purpose_3" onclick="assign_purpose(3,21)"> RECREATION/SIGHT-SEEING <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_3" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_3" value="22" class="evisa_purpose_3" onclick="assign_purpose(3,22)"> MEETING FRIENDS/RELATIVES <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_3" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_3" value="23" class="evisa_purpose_3" onclick="assign_purpose(3,23)"> SHORT TERM YOGA PROGRAMME <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                            <input type="hidden" id="purpose_3">
+                                                    
+                            <div class="row">
+                                <div class="col-1 " title="Visa Type"></div>
+                                    <div class="col-2"> 
+                                            <input type="checkbox" value="16" name="evisa_service" onchange="show_hide_purpose($(this),16)">eMEDICAL VISA    <br>
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    <div class="row purpose_row_16" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_16" value="24" class="evisa_purpose_16" onclick="assign_purpose(16,24)"> SHORT  TERM MEDICAL TREATMENT OF SELF <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                            <input type="hidden" id="purpose_16">
+                                                    
+                            <div class="row">
+                                <div class="col-1 " title="Visa Type"></div>
+                                    <div class="col-2"> 
+                                            <input type="checkbox" value="1" name="evisa_service" onchange="show_hide_purpose($(this),1)">eBUSINESS VISA    <br>
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="25" class="evisa_purpose_1" onclick="assign_purpose(1,25)"> TO SET UP INDUSTRIAL/BUSINESS VENTURE <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="26" class="evisa_purpose_1" onclick="assign_purpose(1,26)"> SALE/PURCHASE/TRADE <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="27" class="evisa_purpose_1" onclick="assign_purpose(1,27)"> ATTEND TECHNICAL/BUSINESS MEETINGS <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="28" class="evisa_purpose_1" onclick="assign_purpose(1,28)"> TO RECRUIT MANPOWER <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="29" class="evisa_purpose_1" onclick="assign_purpose(1,29)"> PARTICIPATION IN EXHIBITIONS,BUSINESS/TRADE FAIRS <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="30" class="evisa_purpose_1" onclick="assign_purpose(1,30)"> EXPERT/SPECIALIST IN CONNECTION WITH AN ONGOING PROJECT <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="31" class="evisa_purpose_1" onclick="assign_purpose(1,31)"> CONDUCTING TOURS <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                                    <div class="row purpose_row_1" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_1" value="32" class="evisa_purpose_1" onclick="assign_purpose(1,32)"> TO DELIVER LECTURE/S UNDER GLOBAL INITIATIVE FOR ACADEMIC NETWORKS (GIAN) <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                            
+                                
+                            
+                            <input type="hidden" id="purpose_1">
+                                                    
+                            <div class="row">
+                                <div class="col-1 " title="Visa Type"></div>
+                                    <div class="col-2"> 
+                                            <input type="checkbox" value="4" name="evisa_service" onchange="show_hide_purpose($(this),4)">eCONFERENCE Visa    <br>
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    <div class="row purpose_row_4" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_4" value="35" class="evisa_purpose_4" onclick="assign_purpose(4,35)"> TO ATTEND A CONFERENCE/SEMINAR/WORKSHOP ORGANIZED BY A MINISTRY OR DEPARTMENT OF THE GOVERNMENT OF INDIA,STATE GOVERNMENTS OR UT ADMINISTRATIONS AND THEIR SUBORDINATE/ ATTACHED ORGANIZATIONS AND PSUS <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                            <input type="hidden" id="purpose_4">
+                                                    
+                            <div class="row">
+                                <div class="col-1 " title="Visa Type"></div>
+                                    <div class="col-2"> 
+                                            <input type="checkbox" value="13" name="evisa_service" onchange="show_hide_purpose($(this),13)">eMEDICAL ATTENDANT VISA    <br>
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                </div>
+
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                            
+                                
+                                    <div class="row purpose_row_13" style="display: none">
+                                        <div class="col-1"></div>
+                                        <div class="col-2" style="width:50%;color:#0D477C;margin-left: 30px;"> 
+                                            <input type="radio" name="evisa_purpose_13" value="34" class="evisa_purpose_13" onclick="assign_purpose(13,34)"> TO ACCOMPANY PATIENT TRAVELLING TO INDIA ON EMEDICAL VISA <br>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                
+                            
+                                
+                            
+                            <input type="hidden" id="purpose_13">
+                        
+
+                        <input type="hidden" name="evisa_purpose" id="evisa_purpose">
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-2"> <img src="./Indian e-Visa_files/captcha" id="capt" onload="image_loaded();" style="display: inline">                                    
+                            </div>
+                            <div class="col-3"><a href="https://indianvisaonline.gov.in/evisa/Registration#" onclick="return refreshCaptcha();" style="vertical-align: baseline"><img src="./Indian e-Visa_files/refresh.png" style="width:30px;height:30px;display: inline"></a></div>
+                        </div>                      
+
+                        <div class="row">
+                            <div class="col-1 mandatory" id="enter_code" title="Please enter above text">Please enter above text</div>
+                            <div class="col-2"><input type="text" name="captcha" id="captcha" maxlength="20"></div>
+                            <div class="col-3" style="list-style-type: none"></div>
+                        </div>
+                        <div class="row text_center">                           
+                            <div id="registration_common_error" style="text-align:center" class="error1">
+
+                            </div>
+                            <input type="checkbox" id="read_instructions_check"> I have read the instructions ,I have all the required documents in scanned pdf format and photograph in jpg/jpeg format.
+                            <input type="hidden" value="3" name="appl.visa_type_id">
+                            <br>
+                            <input type="button" class="btn btn-primary" value="Continue" onclick="submit_registration_form();">
+                            <input type="hidden" name="submit_registration" value="Continue">
+
+                        </div>
+
+                        <div style="display: block; clear: both;"></div><br><br>
+                        <div class="pageHeading1 text_center">
+                            e-Visa Application
+                        </div>
+                    </div>
+                    <input type="hidden" id="visa_type_id" value="3">
+                </div>
+            </div>
+            <input type="hidden" name="token" value="417cd914-6839-4703-b429-a9ed66276cee">
+        </form>
+
+        
+        
+    
+    <br>
+
+    <script>
+        function open_nationality_dialog() {
+            var natlocal=$("#nationality_id option:selected").text();
+            $('#nationality_confirm_msg').html('');
+            $('#nationality_confirm_msg').html('Kindly confirm that nationality selected is '+natlocal+".");
+            $("#nationality-message").dialog("open");
+        }
+
+        $(function () {
+            $("#nationality-message").dialog({
+                modal: true,
+                autoOpen: false,
+                width: 500,
+                height: 160,
+                buttons: {
+                    Ok: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+        });
+
+
+        $(function () {
+            $("#document-message").dialog({
+                modal: true,
+                autoOpen: false,
+                width: 600,
+                height: 260,
+                buttons: {
+                    Ok: function () {
+                        $(this).dialog("close");
+                        $('#Registration_form').submit();
+                    }
+                }
+            });
+        });
+        //all about date pickers
+        if (document.getElementById('dob_id') != undefined) {
+            $(function () {
+                $("#dob_id").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "1900:nn",
+                    showAnim: 'slide',
+                    maxDate: 0,
+                    onClose: function (dateText, inst) {
+                        // alert("datepicker clsing value = "+$('#app_dob').val());
+                        if (Browser.Version() >= 9) {
+
+                            //$('#app_placeOfBirth').focus();
+                            $('#dob_id').val(changeDate($('#dob_id').val()));
+                            var result = validate_dob($('#dob_id').val().trim(), 1);
+                            if (result != "true")
+                                errorify($('#dob_id'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#dob_id'), "");
+                            }
+                        }
+
+                    }
+                });
+            });
+        }
+        if (document.getElementById('jouryney_id') != undefined) {
+            $(function () {
+                $("#jouryney_id").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    maxDate: "+120d",
+                    minDate: "+4d",
+                    showAnim: 'slide',
+                    onClose: function (dateText, inst) {
+                        if (Browser.Version() >= 9) {
+                            //$('#app_placeOfBirth').focus();
+                            $('#jouryney_id').val(changeDate($('#jouryney_id').val())); //dateLessThanYdays(value,y)
+                            var result = validate_journeydate($('#jouryney_id').val(), 1, 3);
+                            if (result != "true")
+                                errorify($('#jouryney_id'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#jouryney_id'), "");
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+
+        function fetchVisaService(missioncode, visaType, nat) {
+            // Stop form from submitting normally              
+            var missioncode_var = missioncode;
+            var visaType_var = 3;
+            var nationality_var = nat; //nationality_id
+            // Send the data using post 
+            if (missioncode_var == "INDE")
+                window.location = "http://indianfrro.gov.in/mea/";
+            $.ajax({
+                type: "POST",
+                url: "json/fetchVisaServiceRegis",
+                dataType: "json",
+                data: {missioncode: missioncode_var, visa_type_id: visaType_var, nationality: nationality_var},
+                success: function (data) {
+                    //alert("datat="+data);
+                    var innertext = "<option value=''>Select visa service</option>";
+                    for (var i = 0; i < data['visaServiceMasterList'].length; i++) {
+                        innertext = innertext + "<option value='" + data['visaServiceMasterList'][i].visa_service_id + "'>" + data['visaServiceMasterList'][i].visa_service_name + "</option>";
+                    }
+
+                    $('#visaService').html(innertext);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    console.log(thrownError);
+                }
+
+            })
+                    .done(function (data) {
+                    })
+                    .fail(function () {
+
+                    })
+                    .always(function () {
+                    });
+        }
+         function showNationalityPopup(nationality_var) {
+            if (nationality_var == 'GBR')
+            {
+                alert("The e-Visa facility is only applicable to nationals of United Kingdom (British Citizens) and is not available to British Subject, British Protected Person, British Overseas Citizen, British National (Overseas) and British Dependent Territories Citizen.");
+            }          
+        }
+
+        function fetch_document_list() {
+
+            var doc_list = "1) Applicant's recent colored photograph (dimentions 2in X 2in) size less than 1MB <BR>";
+            var doc_list_id = [];
+            var ct = 2;
+            var evisa_purposes = document.getElementById('evisa_purpose');
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==21 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==22 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==23 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==24 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==25 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==26 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==34 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==27 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==28 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==29 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==30 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==31 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==32 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==35 && jQuery.inArray(1, doc_list_id) == -1) {
+                    doc_list_id.push(1);
+                    doc_list = doc_list + ct++ + ") Copy of Passport page containing personal particulars <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==30 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==27 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==28 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==29 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==31 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==26 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==25 && jQuery.inArray(2, doc_list_id) == -1) {
+                    doc_list_id.push(2);
+                    doc_list = doc_list + ct++ + ") Copy of Business Card <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==24 && jQuery.inArray(3, doc_list_id) == -1) {
+                    doc_list_id.push(3);
+                    doc_list = doc_list + ct++ + ") Copy of Letter from the Hospital concerned in India on its letterhead <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==32 && jQuery.inArray(4, doc_list_id) == -1) {
+                    doc_list_id.push(4);
+                    doc_list = doc_list + ct++ + ") Invitation of the host institute to the foreign faculty <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==32 && jQuery.inArray(5, doc_list_id) == -1) {
+                    doc_list_id.push(5);
+                    doc_list = doc_list + ct++ + ") Copy of the sanction order under GIAN issued by the National Coordinating Institute viz. IIT Kharagpur <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==32 && jQuery.inArray(6, doc_list_id) == -1) {
+                    doc_list_id.push(6);
+                    doc_list = doc_list + ct++ + ") Copy of the synopsis of the courses to be taken up by the faculty <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==35 && jQuery.inArray(7, doc_list_id) == -1) {
+                    doc_list_id.push(7);
+                    doc_list = doc_list + ct++ + ") Invitation from organizer <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==35 && jQuery.inArray(8, doc_list_id) == -1) {
+                    doc_list_id.push(8);
+                    doc_list = doc_list + ct++ + ") Political clearance from Ministry of External Affairs (MEA), Government of India <BR>";
+                }
+            });
+        
+            $('[id^="purpose_"]').each(function () {
+                if ($(this).val() != '' && $(this).val() ==35 && jQuery.inArray(9, doc_list_id) == -1) {
+                    doc_list_id.push(9);
+                    doc_list = doc_list + ct++ + ") Event clearance from Ministry of Home Affairs (MHA), Government of India <BR>";
+                }
+            });
+        
+            $('#doc_list_msg').html(doc_list);
+            $("#document-message").dialog('open');
+
+            return false;
+        }
+
+        $(document).ready(function () {
+            if ("" != "") {
+                var evisa_ser_arr = "".split(",");
+                for (var i = 0; i < evisa_ser_arr.length; i++) {
+                    if (evisa_ser_arr[i] != 0) {
+                        //name=evisa_service value=evisa_ser_arr[i] checkit
+                        var evisa_options = document.getElementsByName("evisa_service");
+                        for (var j = 0; j < evisa_options.length; j++) {
+
+                            if (parseInt(evisa_options[j].value) == parseInt(evisa_ser_arr[i])) {
+                                evisa_options[j].checked = true;
+                                $('.purpose_row_' + evisa_options[j].value).css('display', 'block');
+                            }
+                        }
+                    }
+                    //Do something
+                }
+            }
+
+            //autofill evisa_purpose
+            if ("" != "") {
+                var evisa_pur_arr = "".split(",");
+                for (var i = 0; i < evisa_pur_arr.length; i++) {
+                    if (evisa_pur_arr[i] != 0) {
+                        //name=evisa_service value=evisa_ser_arr[i] checkit
+                        var pur_options = $("input[name^='evisa_purpose']");
+                        for (var j = 0; j < pur_options.length; j++) {
+                            if (parseInt(pur_options[j].value) == parseInt(evisa_pur_arr[i])) {
+                                pur_options[j].checked = true;
+
+                            }
+                        }
+                    }
+                    //Do something
+                }
+            }
+
+
+        
+        });
+
+        function decode_visa_service(ser_code) {
+
+
+        
+            if (ser_code == "3")
+                return 'eTOURIST VISA';
+        
+            if (ser_code == "16")
+                return 'eMEDICAL VISA';
+        
+            if (ser_code == "1")
+                return 'eBUSINESS VISA';
+        
+            if (ser_code == "4")
+                return 'eCONFERENCE Visa';
+        
+            if (ser_code == "13")
+                return 'eMEDICAL ATTENDANT VISA';
+        
+        }
+    </script>
+
+
+<div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-dialog-buttons ui-draggable ui-resizable" aria-describedby="nationality-message" aria-labelledby="ui-id-1" style="display: none; position: absolute;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-1" class="ui-dialog-title">Note: Kindly ensure nationality</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="nationality-message" class="ui-dialog-content ui-widget-content">
+            <p id="nationality_confirm_msg">
+
+            </p>            
+        </div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-corner-all ui-widget">Ok</button></div></div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-dialog-buttons ui-draggable ui-resizable" aria-describedby="document-message" aria-labelledby="ui-id-2" style="display: none; position: absolute;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix ui-draggable-handle"><span id="ui-id-2" class="ui-dialog-title">Note: Following documents are required to be submitted</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="document-message" class="ui-dialog-content ui-widget-content">
+            <p id="doc_list_msg">
+
+            </p>            
+        </div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-corner-all ui-widget">Ok</button></div></div><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div></div><div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body></html>

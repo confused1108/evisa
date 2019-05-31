@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<!-- saved from url=(0049)https://indianvisaonline.gov.in/evisa/VisaDetails -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Indian e-Visa</title>
+
+<noscript>
+<meta http-equiv="refresh" content="0; URL=no_js.html">
+</noscript>
+
+<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://localhost:8084/evisa/js/ https://localhost:8084/evisa/css/ , img-src 'self' data:;"/>
+-->
+
+
+<meta http-equiv="X-Frame-Options" content="deny">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<script type="text/javascript" src="./Indian e-Visa_files/jquery.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/jquery-ui.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/declarations.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/blur_functions.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/submit_functions.js"></script>
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/Online_tvoa.css">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery_theme_tvoa.css">
+<link rel="icon" href="https://indianvisaonline.gov.in/evisa/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery-ui.css">
+
+
+        
+        
+        <script type="text/javascript" src="./Indian e-Visa_files/chosen.jquery.js"></script>
+        <script type="text/javascript" src="./Indian e-Visa_files/prism.js"></script>
+        <link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/prism.css">
+        <link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/prism.css">
+        <link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/chosen.css">
+        <script>
+
+
+        </script>
+        <script>
+            $(document).ready(function () {         
+                var config = {
+                    '.chosen-select': {},
+                    '.chosen-select-deselect': {allow_single_deselect: true},
+                    '.chosen-select-no-single': {disable_search_threshold: 10},
+                    '.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
+                    '.chosen-select-rtl': {rtl: true},
+                    '.chosen-select-width': {width: '95%'}
+                }
+                for (var selector in config) {
+                    $(selector).chosen(config[selector]);
+                }
+                $('input[type=text]').each(function () {
+                    var res = $(this).val().replace(/\\/g, "");
+                    res = res.replace(/['"]+/g, '');
+                    $(this).val(res);
+                });
+
+            
+            
+                hideTourOperatorClass();
+            
+                $('.all_saarc_rows').css('display', 'none');
+            
+
+                var befCntryName_var = '';
+                if (!befCntryName_var == "") {
+                    document.getElementById('chkboxbefInd').checked = true;
+                    $('.beforeIndia').css('display', 'block');
+                }
+                var aftCntryName_var = '';
+                if (!aftCntryName_var == "") {
+                    document.getElementById('chkboxAftInd').checked = true;
+                    $('.afterIndia').css('display', 'block');
+                }
+
+                $('#browser_code').val(navigator.appCodeName);
+                $('#browser_name').val(navigator.appName);
+                $('#browser_ver').val(navigator.appVersion);
+
+
+            
+            
+            
+            
+
+                set_saarc_row_count(0);
+
+            
+
+                $('#old_visa_flag1').prop("checked", true);
+                $('#old_visa_flag2').prop("checked", false);
+            
+            
+
+
+                $(".showDate").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    maxDate: "+124d",
+                    minDate: "+4d",
+                    showAnim: 'slide',
+                    onClose: function (dateText, inst) {
+
+                        if (Browser.Version() >= 9) {
+                            $(this).val(changeDate($(this).val()));
+                            var result = validate_conferencedate($(this).val(), 1, 3);
+                            if (result != "true")
+                                errorify($(this), result);
+                            else {
+                                correctify($(this), "Please enter date");
+                            }
+                        }
+
+                    }
+                });
+
+                $(".showDateOfBirth").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "1900:nn",
+                    maxDate: 0,
+                    showAnim: 'slide',
+                    onClose: function (dateText, inst) {
+
+                        if (Browser.Version() >= 9) {
+                            $(this).val(changeDate($(this).val()));
+                            var result = validate_dob($(this).val(), 1);
+                            if (result != "true")
+                                errorify($(this), result);
+                            else {
+                                correctify($(this), "Please enter date of birth");
+                            }
+                        }
+                    }
+                });
+                load_service_req_blurs();
+
+
+                if ($('#patientMedialOrVisa').val() === 'VISANUMBER') {
+                    $('#patient_visa_no').parent().parent().css('display', '');
+                    $('#patient_application_id').parent().parent().css('display', 'none');
+                    $('#visaNoRadio').prop('checked', true);
+
+                } else if ($('#patientMedialOrVisa').val() === 'APPLICATIONID') {
+                    $('#patient_application_id').parent().parent().css('display', '');
+                    $('#patient_visa_no').parent().parent().css('display', 'none');
+                    $('#applicationIdRadio').prop('checked', true);
+                }
+
+                if ($('#patient_visa_no').val() == 'NA') {
+                    $('#patient_visa_no').val('');
+                }
+                if ($('#patient_application_id').val() == 'NA') {
+                    $('#patient_application_id').val('');
+                }
+
+            });//end of ready
+
+          
+
+            function patientVisaApplicationid(radioId) {
+                if (radioId.val() === "patientVisa") {
+                    $('#patientMedialOrVisa').val('VISANUMBER');
+                    $('#patient_application_id').val('');
+                    $('#patient_visa_no').parent().parent().css('display', '');
+                    $('#patient_application_id').parent().parent().css('display', 'none');
+                } else if (radioId.val() === "patientApplicationid") {
+                    $('#patientMedialOrVisa').val('APPLICATIONID');
+                    $('#patient_visa_no').val('');
+                    $('#patient_application_id').parent().parent().css('display', '');
+                    $('#patient_visa_no').parent().parent().css('display', 'none');
+                }
+            }
+            function hideTourOperatorClass() {
+                $('.tourOperatorClass').css('display', 'none');
+                $('#nameTourOperator_id').val('');
+                $('#addressTourOperator_id').val('');
+                $('#nameOfHotelResort_id').val('');
+                $('#placeOfHotelResort_id').val('');
+            }
+        </script>       
+        <style>
+            .col-11other {
+                width: 98%;
+                background: #BBD7F2;
+                font-size: 1em;
+                font-weight: bold;
+                line-height: 1.6em;
+            }
+        </style>
+    </head>
+    <body onload="backButtonOverride();">
+        <form method="post" action="https://indianvisaonline.gov.in/evisa/VisaDetails" autocomplete="off" onsubmit="return validate_visa_details_form(3);">
+
+            <div class="wrapper">
+                <div class="pageHeader"></div>
+                <div class="pageHeading1 text_center">
+                    Visa Details Form
+                    <a href="https://indianvisaonline.gov.in/evisa/tvoa.html"><img align="right" src="./Indian e-Visa_files/home.png" style=" width: 30px; height:26px;"></a>
+                </div>                 
+                <div class="row">
+                    <div class="col-11 text_center" style="background: white">
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="continue" value="Save and Continue">
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="exit" value="Save and Temporarily Exit" title="Save and Register Later">
+                        </div>
+                </div>            
+                
+                <div class="text_left text_bold" style="font-size: 1.2em">
+                    <span>Please note down the Temporary Application ID :<span style="color:#d6262c"> 5X3AA858WBUSARB</span></span>
+                    <hr style="border:none;height:1px">
+                </div>
+                <div>
+                    <span>Your Information will be saved if you click save button or continue to next page. If you exit without doing either of that, your information will be lost.</span>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-11">Details of Visa Sought</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Type of Visa </div>
+                        <div class="col-32">
+                            e-Visa
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Visa Service</div>
+                        <div class="col-32">
+                            eTOURIST VISA
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                        <!-- start of mandatory fields -->
+                    <div class="row">
+                        <div class="col-31 mandatory">Places to be visited</div>
+                        <div class="col-32">
+                            <input name="appl.placesToBeVisited1" value="" type="text" maxlength="50" class="service_req_form_val" id="placesToBeVisited1_id">
+                        </div>
+                        <div class="col-33">
+                            If you intend to visit
+                            Protected/Restricted/Cantonment areas, you would require prior permission from
+                            the Civil Authority.<a target="_blank" href="http://www.mdoner.gov.in/content/rappap-restrictedprotected-area-permit">Please visit this website.</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31">Places to be visited line 2</div>
+                        <div class="col-32">
+                            <input name="appl.placesToBeVisited2" value="" type="text" maxlength="50" class="service_req_form_val" id="placesToBeVisited2_id">
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31">Have you booked any room in Hotel/Resort etc. through any Tour Operator?</div>
+                        <div class="col-32">
+                            Yes<input name="appl.haveYouBookedRoomInHotel" value="YES" type="radio" class="" id="haveYouBookedRoomInHotel_yes_id" onclick="$(&#39;.tourOperatorClass&#39;).css(&#39;display&#39;, &#39;block&#39;);"> &nbsp;&nbsp;
+                            No<input name="appl.haveYouBookedRoomInHotel" value="NO" type="radio" class="" id="haveYouBookedRoomInHotel_no_id" onclick="hideTourOperatorClass();"> 
+                            </div>
+                            <div class="col-33"></div>
+                        </div>    
+                        <div class="row tourOperatorClass" style="display: none;">
+                            <div class="col-31">Name of the tour operator</div>
+                            <div class="col-32">
+                                <input name="appl.nameTourOperator" value="" type="text" maxlength="50" id="nameTourOperator_id">
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row tourOperatorClass" style="display: none;">
+                        <div class="col-31">Address of the tour operator</div>
+                        <div class="col-32">
+                            <input name="appl.addressTourOperator" value="" type="text" maxlength="50" id="addressTourOperator_id">
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row tourOperatorClass" style="display: none;">
+                        <div class="col-31">Name of Hotel/Resort etc</div>
+                        <div class="col-32">
+                            <input name="appl.nameOfHotelResort" value="" type="text" maxlength="50" id="nameOfHotelResort_id">
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row tourOperatorClass" style="display: none;">
+                        <div class="col-31">Place/City of Hotel/Resort etc</div>
+                        <div class="col-32">
+                            <input name="appl.placeOfHotelResort" value="" type="text" maxlength="50" id="placeOfHotelResort_id">
+                        </div>
+                        <div class="col-33"></div>
+                    </div>
+
+
+                    <!-- end of mandatory fields -->
+
+                    
+                                      
+
+                    
+                                          
+                        
+                            
+                                <div class="row">
+                                    <div class="col-11other">Details of Purpose "MEETING FRIENDS/RELATIVES"</div>
+                                </div>
+                            
+                            
+                            
+
+                                <div class="row">                                    
+                                    <div class="col-31">
+                                        Details of the Friend/Relative
+                                    </div>
+                                    <div class="col-32">
+                                        
+                                        
+                                        
+                                        
+                                          
+
+                                        
+
+                                        
+                                        
+                                        
+                                            <input name="service_req_form_values" value="" type="text" maxlength="50" class="service_req_form_val" id="visa_serreq_id_15">
+                                        
+
+                                    </div>
+                                    <div class="col-33">
+
+                                    </div>
+                                </div> <!-- end of row -->
+                            
+                            
+                        
+                                          
+                        
+                            
+                            
+                            
+
+                                <div class="row">                                    
+                                    <div class="col-31">
+                                        Address
+                                    </div>
+                                    <div class="col-32">
+                                        
+                                        
+                                        
+                                        
+                                          
+
+                                        
+
+                                        
+                                        
+                                        
+                                            <input name="service_req_form_values" value="" type="text" maxlength="50" class="service_req_form_val" id="visa_serreq_id_3">
+                                        
+
+                                    </div>
+                                    <div class="col-33">
+
+                                    </div>
+                                </div> <!-- end of row -->
+                            
+                            
+                        
+                                          
+                        
+                            
+                            
+                            
+
+                                <div class="row">                                    
+                                    <div class="col-31">
+                                        State
+                                    </div>
+                                    <div class="col-32">
+                                        
+                                            
+                                            <select name="service_req_form_values" onchange="fetchDistrictList($(this).val(), $(this).parent().parent().next().children(&#39;div.col-32&#39;).find(&#39;select&#39;));" class="service_req_form_val" id="visa_serreq_id_4">
+                                                <option value="">Select state</option>
+                                                
+                                                    <option value="CHANDIGARH">CHANDIGARH</option>
+                                                
+                                                    <option value="ANDAMAN AND NICOBAR ISLANDS">ANDAMAN AND NICOBAR ISLANDS</option>
+                                                
+                                                    <option value="ANDHRA PRADESH">ANDHRA PRADESH</option>
+                                                
+                                                    <option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH</option>
+                                                
+                                                    <option value="ASSAM">ASSAM</option>
+                                                
+                                                    <option value="BIHAR">BIHAR</option>
+                                                
+                                                    <option value="CHHATTISGARH">CHHATTISGARH</option>
+                                                
+                                                    <option value="DAMAN AND DIU">DAMAN AND DIU</option>
+                                                
+                                                    <option value="DELHI">DELHI</option>
+                                                
+                                                    <option value="GOA">GOA</option>
+                                                
+                                                    <option value="GUJARAT">GUJARAT</option>
+                                                
+                                                    <option value="HARYANA">HARYANA</option>
+                                                
+                                                    <option value="HIMACHAL PRADESH">HIMACHAL PRADESH</option>
+                                                
+                                                    <option value="JAMMU AND KASHMIR">JAMMU AND KASHMIR</option>
+                                                
+                                                    <option value="JHARKHAND">JHARKHAND</option>
+                                                
+                                                    <option value="KARNATAKA">KARNATAKA</option>
+                                                
+                                                    <option value="KERALA">KERALA</option>
+                                                
+                                                    <option value="MADHYA PRADESH">MADHYA PRADESH</option>
+                                                
+                                                    <option value="MAHARASHTRA">MAHARASHTRA</option>
+                                                
+                                                    <option value="MANIPUR">MANIPUR</option>
+                                                
+                                                    <option value="MEGHALAYA">MEGHALAYA</option>
+                                                
+                                                    <option value="MIZORAM">MIZORAM</option>
+                                                
+                                                    <option value="NAGALAND">NAGALAND</option>
+                                                
+                                                    <option value="ORISSA">ORISSA</option>
+                                                
+                                                    <option value="PONDICHERRY">PONDICHERRY</option>
+                                                
+                                                    <option value="PUNJAB">PUNJAB</option>
+                                                
+                                                    <option value="RAJASTHAN">RAJASTHAN</option>
+                                                
+                                                    <option value="SIKKIM">SIKKIM</option>
+                                                
+                                                    <option value="TAMIL NADU">TAMIL NADU</option>
+                                                
+                                                    <option value="TRIPURA">TRIPURA</option>
+                                                
+                                                    <option value="UTTAR PRADESH">UTTAR PRADESH</option>
+                                                
+                                                    <option value="WEST BENGAL">WEST BENGAL</option>
+                                                
+                                                    <option value="DADRA NAGAR HAVELI">DADRA NAGAR HAVELI</option>
+                                                
+                                                    <option value="LAKSHADWEEP">LAKSHADWEEP</option>
+                                                
+                                                    <option value="TELANGANA">TELANGANA</option>
+                                                
+                                                    <option value="UTTARAKHAND">UTTARAKHAND</option>
+                                                
+                                            </select>
+                                        
+                                        
+                                        
+                                        
+                                          
+
+                                        
+
+                                        
+                                        
+                                        
+
+                                    </div>
+                                    <div class="col-33">
+
+                                    </div>
+                                </div> <!-- end of row -->
+                            
+                            
+                        
+                                          
+                        
+                            
+                            
+                            
+
+                                <div class="row">                                    
+                                    <div class="col-31">
+                                        District
+                                    </div>
+                                    <div class="col-32">
+                                        
+                                        
+                                            
+                                            <select name="service_req_form_values" class="service_req_form_val" id="visa_serreq_id_6">
+                                                <option value="">Select district</option>
+                                            </select>
+                                        
+                                        
+                                        
+                                          
+
+                                        
+
+                                        
+                                        
+                                        
+
+                                    </div>
+                                    <div class="col-33">
+
+                                    </div>
+                                </div> <!-- end of row -->
+                            
+                            
+                        
+                                          
+                        
+                            
+                            
+                            
+
+                                <div class="row">                                    
+                                    <div class="col-31">
+                                        Phone no
+                                    </div>
+                                    <div class="col-32">
+                                        
+                                        
+                                        
+                                        
+                                          
+
+                                        
+
+                                        
+                                        
+                                        
+                                            <input name="service_req_form_values" value="" type="text" maxlength="50" class="service_req_form_val" id="visa_serreq_id_100">
+                                        
+
+                                    </div>
+                                    <div class="col-33">
+
+                                    </div>
+                                </div> <!-- end of row -->
+                            
+                            
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                                          
+                        
+                    
+                    <div class="row">
+                        <div class="col-31 mandatory">Duration of Visa</div>
+                        <div class="col-32 text-bold">365 days
+                        </div>
+                        <div class="col-33">Duration of visa is 365 days from date of arrival</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">No. of Entries </div>
+                        <div class="col-32 text-bold">Multiple
+                        </div>
+                        <div class="col-33">No of Entries</div>
+                    </div>
+
+
+                    
+                    
+                        <div class="row">
+                            <div class="col-31 mandatory">Port of Arrival in India </div>
+
+                            <div class="col-32 text-bold">BHUBANESHWAR AIRPORT
+
+                            </div>
+                            <div class="col-33">Port of arrival in India</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-31">Expected Port of Exit from India </div>
+                            <div class="col-32">
+                                
+                                <select name="appl.exitpoint" id="exitpoint">
+                                    <option value="">Select exit point</option>
+                                    
+                                        <option value="AHMEDABAD AIRPORT">AHMEDABAD AIRPORT</option>
+                                    
+                                        <option value="AMRITSAR AIRPORT">AMRITSAR AIRPORT</option>
+                                    
+                                        <option value="BAGDOGRA AIRPORT">BAGDOGRA AIRPORT</option>
+                                    
+                                        <option value="BENGALURU AIRPORT">BENGALURU AIRPORT</option>
+                                    
+                                        <option value="BHUBANESHWAR AIRPORT">BHUBANESHWAR AIRPORT</option>
+                                    
+                                        <option value="CALICUT AIRPORT">CALICUT AIRPORT</option>
+                                    
+                                        <option value="CHANDIGARH AIRPORT">CHANDIGARH AIRPORT</option>
+                                    
+                                        <option value="CHENNAI AIRPORT">CHENNAI AIRPORT</option>
+                                    
+                                        <option value="CHENNAI SEAPORT">CHENNAI SEAPORT</option>
+                                    
+                                        <option value="COCHIN AIRPORT">COCHIN AIRPORT</option>
+                                    
+                                        <option value="COCHIN SEAPORT">COCHIN SEAPORT</option>
+                                    
+                                        <option value="COIMBATORE AIRPORT">COIMBATORE AIRPORT</option>
+                                    
+                                        <option value="DELHI AIRPORT">DELHI AIRPORT</option>
+                                    
+                                        <option value="GAYA AIRPORT">GAYA AIRPORT</option>
+                                    
+                                        <option value="GOA AIRPORT">GOA AIRPORT</option>
+                                    
+                                        <option value="GOA SEAPORT">GOA SEAPORT</option>
+                                    
+                                        <option value="GUWAHATI AIRPORT">GUWAHATI AIRPORT</option>
+                                    
+                                        <option value="HYDERABAD AIRPORT">HYDERABAD AIRPORT</option>
+                                    
+                                        <option value="JAIPUR AIRPORT">JAIPUR AIRPORT</option>
+                                    
+                                        <option value="KOLKATA AIRPORT">KOLKATA AIRPORT</option>
+                                    
+                                        <option value="LUCKNOW AIRPORT">LUCKNOW AIRPORT</option>
+                                    
+                                        <option value="MADURAI AIRPORT">MADURAI AIRPORT</option>
+                                    
+                                        <option value="MANGALORE AIRPORT">MANGALORE AIRPORT</option>
+                                    
+                                        <option value="MANGALORE SEAPORT">MANGALORE SEAPORT</option>
+                                    
+                                        <option value="MUMBAI AIRPORT">MUMBAI AIRPORT</option>
+                                    
+                                        <option value="MUMBAI SEAPORT">MUMBAI SEAPORT</option>
+                                    
+                                        <option value="NAGPUR AIRPORT">NAGPUR AIRPORT</option>
+                                    
+                                        <option value="PORTBLAIR AIRPORT">PORTBLAIR AIRPORT</option>
+                                    
+                                        <option value="PUNE AIRPORT">PUNE AIRPORT</option>
+                                    
+                                        <option value="TIRUCHIRAPALLI AIRPORT">TIRUCHIRAPALLI AIRPORT</option>
+                                    
+                                        <option value="TRIVANDRUM AIRPORT">TRIVANDRUM AIRPORT</option>
+                                    
+                                        <option value="VARANASI AIRPORT">VARANASI AIRPORT</option>
+                                    
+                                        <option value="VISHAKHAPATNAM AIRPORT">VISHAKHAPATNAM AIRPORT</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="col-33">Expected Port of Exit from India</div>
+                        </div>
+                    
+
+
+                    <div class="row">
+                        <div class="col-11">Previous Visa/Currently valid Visa Details</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-31 mandatory">Have you ever visited India before?</div>
+                        <div class="col-32">
+
+                            Yes<input type="radio" style="width:auto;border:none" id="old_visa_flag1" name="appl.old_visa_flag" value="YES" onclick="prev_visit_fn()">
+                            / No<input type="radio" style="width:auto;border:none" id="old_visa_flag2" name="appl.old_visa_flag" value="NO" onclick="prev_visit_fn()">
+                        </div>
+                        <div class="col-33">If Yes Please give Details</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Address</div>
+                        <div class="col-32"><input name="appl.prv_visit_add1" value="" type="text" maxlength="35" id="prv_visit_add1">   </div>
+                        <div class="col-33">Enter the address of stay during your last visit</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31"></div>
+                        <div class="col-32"><input name="appl.prv_visit_add2" value="" type="text" maxlength="35" id="prv_visit_add2">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31"></div>
+                        <div class="col-32"><input name="appl.prv_visit_add3" value="" type="text" maxlength="35" id="prv_visit_add3">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Cities previously visited in India</div>
+                        <div class="col-32"><textarea name="appl.visited_city" cols="40" rows="3" maxlength="75" id="visited_city"></textarea></div>
+                        <div class="col-33">Cities in India visited (comma separated)</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Last Indian Visa No/Currently valid Indian Visa No.</div>
+                        <div class="col-32"><input name="appl.old_visa_no" value="" type="text" maxlength="10" id="old_visa_no">   </div>
+                        <div class="col-33">Last Indian Visa no / Currently valid Visa no</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Type of Visa</div>
+                        <div class="col-32">
+                            
+                            <select name="appl.old_visa_type_id" id="old_visa_type_id">
+                                <option value="">Select visa type</option>
+                                
+                                    <option value="1">BUSINESS VISA</option>
+                                
+                                    <option value="4">CONFERENCE VISA</option>
+                                
+                                    <option value="11">DIPLOMATIC VISA</option>
+                                
+                                    <option value="87">DOUBLE ENTRY</option>
+                                
+                                    <option value="9">EMPLOYMENT  VISA</option>
+                                
+                                    <option value="6">ENTRY VISA</option>
+                                
+                                    <option value="100">e-Visa</option>
+                                
+                                    <option value="84">FILM VISA</option>
+                                
+                                    <option value="85">INTERN VISA</option>
+                                
+                                    <option value="8">JOURNALIST VISA</option>
+                                
+                                    <option value="13">MEDICAL ATTENDANT</option>
+                                
+                                    <option value="16">MEDICAL VISA</option>
+                                
+                                    <option value="7">MISSIONARY VISA</option>
+                                
+                                    <option value="63">MOUNTAINEERING VISA</option>
+                                
+                                    <option value="12">OFFICIAL VISA</option>
+                                
+                                    <option value="64">PILGRIMES VISA</option>
+                                
+                                    <option value="65">PROJECT VISA</option>
+                                
+                                    <option value="66">RESEARCH VISA</option>
+                                
+                                    <option value="2">STUDENT VISA</option>
+                                
+                                    <option value="3">TOURIST VISA</option>
+                                
+                                    <option value="5">TRANSIT VISA</option>
+                                
+                                    <option value="86">UN DIPLOMAT</option>
+                                
+                                    <option value="17">UN OFFICIAL</option>
+                                
+                                    <option value="76">VISIT VISA</option>
+                                
+                            </select>
+                        </div>
+                        <div class="col-33">Type of Visa</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Place of Issue</div>
+                        <div class="col-32"><input name="appl.oldvisaissueplace" value="" type="text" maxlength="50" id="oldvisaissueplace">   </div>
+                        <div class="col-33">Place of Issue</div>
+                    </div>
+                    <div class="row prv_visit_details_row">
+                        <div class="col-31 mandatory">Date of Issue</div>
+                        <div class="col-32"><input name="appl.oldvisaissuedate" value="" type="text" maxlength="10" id="oldvisaissuedate" class="hasDatepicker">
+                            <input type="hidden" id="dob" value="21/05/2019">
+                        </div>
+                        <div class="col-33">Date of Issue in (DD/MM/YYYY) format</div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-312">Has permission to visit or to extend stay in India previously been refused?
+                            <input type="radio" id="refuse_flag1" style="width:auto;border: none" value="YES" name="appl.refuse_flag" onclick="$(&#39;.refuse_row&#39;).css(&#39;display&#39;, &#39;block&#39;);" checked="">Yes
+                                <input type="radio" id="refuse_flag2" style="width:auto;border: none" value="NO" name="appl.refuse_flag" onclick="$(&#39;.refuse_row&#39;).css(&#39;display&#39;, &#39;none&#39;);
+                                        $(&#39;#refuse_details&#39;).val(&#39;&#39;)">No
+                            </div>
+                            <div class="col-33">Refuse Details Yes /No</div>
+                        </div>
+                        <div class="row refuse_row" style="display: block">
+                            <div class="col-31 mandatory">If so, when and by whom (Mention Control No. and date also)</div>
+                            <div class="col-32"><input name="appl.refuse_details" value="" type="text" maxlength="100" id="refuse_details">   </div>
+                        <div class="col-33">If so, when and by whom (mention Control no and date)</div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-11">Other Information</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31">Countries Visited in Last 10 years</div>
+                        <div class="col-32">        
+                                                       
+                            <select class="chosen-select" multiple="" tabindex="-1" id="country_visited" name="appl.country_visited" data-placeholder="Select countries.." style="display: none;">
+                                
+                                    <option value="AFG">AFGHANISTAN</option>
+                                
+                                    <option value="ALA">ALAND ISLANDS</option>
+                                
+                                    <option value="ALB">ALBANIA</option>
+                                
+                                    <option value="DZA">ALGERIA</option>
+                                
+                                    <option value="ASM">AMERICAN SAMOA</option>
+                                
+                                    <option value="AND">ANDORRA</option>
+                                
+                                    <option value="AGO">ANGOLA</option>
+                                
+                                    <option value="AIA">ANGUILLA</option>
+                                
+                                    <option value="ATA">ANTARTICA</option>
+                                
+                                    <option value="ATG">ANTIGUA AND BARBUDA</option>
+                                
+                                    <option value="ARG">ARGENTINA</option>
+                                
+                                    <option value="ARM">ARMENIA</option>
+                                
+                                    <option value="ABW">ARUBA</option>
+                                
+                                    <option value="AUS">AUSTRALIA</option>
+                                
+                                    <option value="AUT">AUSTRIA</option>
+                                
+                                    <option value="AZE">AZERBAIJAN</option>
+                                
+                                    <option value="BHS">BAHAMAS</option>
+                                
+                                    <option value="BHR">BAHRAIN</option>
+                                
+                                    <option value="BGD">BANGLADESH</option>
+                                
+                                    <option value="BRB">BARBADOS</option>
+                                
+                                    <option value="BLR">BELARUS</option>
+                                
+                                    <option value="BEL">BELGIUM</option>
+                                
+                                    <option value="BLZ">BELIZE</option>
+                                
+                                    <option value="BEN">BENIN</option>
+                                
+                                    <option value="BMU">BERMUDA</option>
+                                
+                                    <option value="BTN">BHUTAN</option>
+                                
+                                    <option value="BOL">BOLIVIA</option>
+                                
+                                    <option value="BIH">BOSNIA AND HERZEGOVINA</option>
+                                
+                                    <option value="BWA">BOTSWANA</option>
+                                
+                                    <option value="BVT">BOUVET ISLAND</option>
+                                
+                                    <option value="BRA">BRAZIL</option>
+                                
+                                    <option value="IOT">BRITISH INDIAN OCEAN TERRITORY</option>
+                                
+                                    <option value="BRN">BRUNEI</option>
+                                
+                                    <option value="BGR">BULGARIA</option>
+                                
+                                    <option value="BFA">BURKINA FASO</option>
+                                
+                                    <option value="BDI">BURUNDI</option>
+                                
+                                    <option value="KHM">CAMBODIA</option>
+                                
+                                    <option value="CMR">CAMEROON</option>
+                                
+                                    <option value="CAN">CANADA</option>
+                                
+                                    <option value="CPV">CAPE VERDE</option>
+                                
+                                    <option value="XCC">CARRIBEAN COMMUNITY</option>
+                                
+                                    <option value="CYM">CAYMAN ISLANDS</option>
+                                
+                                    <option value="CAF">CENTRAL AFRICAN REPUBLIC</option>
+                                
+                                    <option value="TCD">CHAD</option>
+                                
+                                    <option value="CHL">CHILE</option>
+                                
+                                    <option value="CHN">CHINA-CHINA</option>
+                                
+                                    <option value="HKG">CHINA- SAR HONGKONG</option>
+                                
+                                    <option value="MAC">CHINA- SAR MACAU</option>
+                                
+                                    <option value="CXR">CHRISTMAS ISLANDS</option>
+                                
+                                    <option value="CCK">COCOS (KEELING) ISLANDS</option>
+                                
+                                    <option value="COL">COLOMBIA</option>
+                                
+                                    <option value="COM">COMOROS</option>
+                                
+                                    <option value="COG">CONGO</option>
+                                
+                                    <option value="COD">CONGO (DEMOCRATIC REPUBLIC OF)</option>
+                                
+                                    <option value="COK">COOK ISLANDS</option>
+                                
+                                    <option value="CRI">COSTA RICA</option>
+                                
+                                    <option value="CIV">COTE D'IVOIRE</option>
+                                
+                                    <option value="HRV">CROATIA</option>
+                                
+                                    <option value="CUB">CUBA</option>
+                                
+                                    <option value="CYP">CYPRUS</option>
+                                
+                                    <option value="CZE">CZECH REPUBLIC</option>
+                                
+                                    <option value="PRK">DEMOCRATIC PEOPLE'S REPUBLIC OF KOREA</option>
+                                
+                                    <option value="DNK">DENMARK</option>
+                                
+                                    <option value="DJI">DJIBOUTI</option>
+                                
+                                    <option value="DMA">DOMINICA</option>
+                                
+                                    <option value="DOM">DOMINICAN REPUBLIC</option>
+                                
+                                    <option value="TLS">EAST TIMOR (DEMOCRATIC REPUBLIC OF)</option>
+                                
+                                    <option value="ECU">ECUADOR</option>
+                                
+                                    <option value="EGY">EGYPT</option>
+                                
+                                    <option value="SLV">EL SALVADOR</option>
+                                
+                                    <option value="GNQ">EQUATORIAL GUINEA</option>
+                                
+                                    <option value="ERI">ERITREA</option>
+                                
+                                    <option value="EST">ESTONIA</option>
+                                
+                                    <option value="ETH">ETHIOPIA</option>
+                                
+                                    <option value="FLK">FALKLAND ISLANDS (MALVINES)</option>
+                                
+                                    <option value="FRO">FAROE ISLANDS</option>
+                                
+                                    <option value="FJI">FIJI</option>
+                                
+                                    <option value="FIN">FINLAND</option>
+                                
+                                    <option value="FRA">FRANCE</option>
+                                
+                                    <option value="FXX">FRANCE METROPOLITAN</option>
+                                
+                                    <option value="GUF">FRENCH GUIANA</option>
+                                
+                                    <option value="PYF">FRENCH POLYNESIA</option>
+                                
+                                    <option value="ATF">FRENCH SOUTHERN TERRITORIES</option>
+                                
+                                    <option value="GAB">GABON</option>
+                                
+                                    <option value="GMB">GAMBIA</option>
+                                
+                                    <option value="GEO">GEORGIA</option>
+                                
+                                    <option value="DEU">GERMANY</option>
+                                
+                                    <option value="GHA">GHANA</option>
+                                
+                                    <option value="GIB">GIBRALTAR</option>
+                                
+                                    <option value="GRC">GREECE</option>
+                                
+                                    <option value="GRL">GREENLAND</option>
+                                
+                                    <option value="GRD">GRENADA</option>
+                                
+                                    <option value="GLP">GUADELOUPE</option>
+                                
+                                    <option value="GUM">GUAM</option>
+                                
+                                    <option value="GTM">GUATEMALA</option>
+                                
+                                    <option value="GGY">GUERNSEY</option>
+                                
+                                    <option value="GIN">GUINEA</option>
+                                
+                                    <option value="GNB">GUINEA-BISSAU</option>
+                                
+                                    <option value="GUY">GUYANA</option>
+                                
+                                    <option value="HTI">HAITI</option>
+                                
+                                    <option value="HMD">HEARD AND MCDONALD ISLANDS</option>
+                                
+                                    <option value="HND">HONDURAS</option>
+                                
+                                    <option value="HUN">HUNGARY</option>
+                                
+                                    <option value="ISL">ICELAND</option>
+                                
+                                    <option value="IND">INDIA</option>
+                                
+                                    <option value="IDN">INDONESIA</option>
+                                
+                                    <option value="IRN">IRAN</option>
+                                
+                                    <option value="IRQ">IRAQ</option>
+                                
+                                    <option value="IRL">IRELAND</option>
+                                
+                                    <option value="IMN">ISLE OF MAN</option>
+                                
+                                    <option value="ISR">ISRAEL</option>
+                                
+                                    <option value="ITA">ITALY</option>
+                                
+                                    <option value="JAM">JAMAICA</option>
+                                
+                                    <option value="JPN">JAPAN</option>
+                                
+                                    <option value="JEY">JERSEY</option>
+                                
+                                    <option value="JOR">JORDAN</option>
+                                
+                                    <option value="KAZ">KAZAKHSTAN</option>
+                                
+                                    <option value="KEN">KENYA</option>
+                                
+                                    <option value="KIR">KIRIBATI</option>
+                                
+                                    <option value="KWT">KUWAIT</option>
+                                
+                                    <option value="KGZ">KYRGYZSTAN</option>
+                                
+                                    <option value="LAO">LAOS</option>
+                                
+                                    <option value="LVA">LATVIA</option>
+                                
+                                    <option value="LBN">LEBANON</option>
+                                
+                                    <option value="LSO">LESOTHO</option>
+                                
+                                    <option value="LBR">LIBERIA</option>
+                                
+                                    <option value="LBY">LIBYA</option>
+                                
+                                    <option value="LIE">LIECHTENSTEIN</option>
+                                
+                                    <option value="LTU">LITHUANIA</option>
+                                
+                                    <option value="LUX">LUXEMBOURG</option>
+                                
+                                    <option value="MDG">MADAGASCAR</option>
+                                
+                                    <option value="MWI">MALAWI</option>
+                                
+                                    <option value="MYS">MALAYSIA</option>
+                                
+                                    <option value="MDV">MALDIVES</option>
+                                
+                                    <option value="MLI">MALI</option>
+                                
+                                    <option value="MLT">MALTA</option>
+                                
+                                    <option value="MHL">MARSHALL ISLANDS</option>
+                                
+                                    <option value="MTQ">MARTINIQUE</option>
+                                
+                                    <option value="MRT">MAURITANIA</option>
+                                
+                                    <option value="MUS">MAURITIUS</option>
+                                
+                                    <option value="MYT">MAYOTTE</option>
+                                
+                                    <option value="MEX">MEXICO</option>
+                                
+                                    <option value="FSM">MICRONESIA (FEDERATED STATES OF)</option>
+                                
+                                    <option value="MDA">MOLDOVA</option>
+                                
+                                    <option value="MCO">MONACO</option>
+                                
+                                    <option value="MNG">MONGOLIA</option>
+                                
+                                    <option value="MNE">MONTENEGRO</option>
+                                
+                                    <option value="MSR">MONTSERRAT</option>
+                                
+                                    <option value="MAR">MOROCCO</option>
+                                
+                                    <option value="MOZ">MOZAMBIQUE</option>
+                                
+                                    <option value="MMR">MYANMAR</option>
+                                
+                                    <option value="NAM">NAMIBIA</option>
+                                
+                                    <option value="NRU">NAURU</option>
+                                
+                                    <option value="NPL">NEPAL</option>
+                                
+                                    <option value="NLD">NETHERLANDS</option>
+                                
+                                    <option value="ANT">NETHERLANDS ANTILLES</option>
+                                
+                                    <option value="NTZ">NEUTRAL ZONE</option>
+                                
+                                    <option value="NCL">NEW CALEDONIA</option>
+                                
+                                    <option value="NZL">NEW ZEALAND</option>
+                                
+                                    <option value="NIC">NICARAGUA</option>
+                                
+                                    <option value="NER">NIGER</option>
+                                
+                                    <option value="NGA">NIGERIA</option>
+                                
+                                    <option value="NIU">NIUE ISLAND</option>
+                                
+                                    <option value="NFK">NORFOLK ISLAND</option>
+                                
+                                    <option value="MNP">NORTHERN MARIANA ISLANDS</option>
+                                
+                                    <option value="NOR">NORWAY</option>
+                                
+                                    <option value="OMN">OMAN</option>
+                                
+                                    <option value="OTH">OTHERS</option>
+                                
+                                    <option value="PAK">PAKISTAN</option>
+                                
+                                    <option value="PLW">PALAU</option>
+                                
+                                    <option value="PSE">PALESTINE</option>
+                                
+                                    <option value="PAN">PANAMA</option>
+                                
+                                    <option value="PNG">PAPUA NEW GUINEA</option>
+                                
+                                    <option value="PRY">PARAGUAY</option>
+                                
+                                    <option value="XXX">PERSON OF UNSPECIFIED NATIONALITY</option>
+                                
+                                    <option value="PER">PERU</option>
+                                
+                                    <option value="PHL">PHILIPPINES</option>
+                                
+                                    <option value="PCN">PITCAIRN</option>
+                                
+                                    <option value="POL">POLAND</option>
+                                
+                                    <option value="PRT">PORTUGAL</option>
+                                
+                                    <option value="PRI">PUERTO RICO</option>
+                                
+                                    <option value="QAT">QATAR</option>
+                                
+                                    <option value="XXB">REFUGEE</option>
+                                
+                                    <option value="XXC">REFUGEE(NON-CONVENTIONAL)</option>
+                                
+                                    <option value="KOR">REPUBLIC OF KOREA</option>
+                                
+                                    <option value="MKD">REPUBLIC OF MACEDONIA</option>
+                                
+                                    <option value="UNK">RESIDENT OF KOSOVO (UNMIK)</option>
+                                
+                                    <option value="REU">REUNION</option>
+                                
+                                    <option value="ROU">ROMANIA</option>
+                                
+                                    <option value="RUS">RUSSIAN FEDERATION</option>
+                                
+                                    <option value="RWA">RWANDA</option>
+                                
+                                    <option value="SHN">SAINT HELENA</option>
+                                
+                                    <option value="KNA">SAINT KITTS AND NEVIS</option>
+                                
+                                    <option value="LCA">SAINT LUCIA</option>
+                                
+                                    <option value="SPM">SAINT PIERRE AND MIQUELON</option>
+                                
+                                    <option value="VCT">SAINT VINCENT AND THE GRENADINES</option>
+                                
+                                    <option value="WSM">SAMOA</option>
+                                
+                                    <option value="SMR">SAN MARINO</option>
+                                
+                                    <option value="STP">SAO TOME AND PRINCIPE</option>
+                                
+                                    <option value="SAU">SAUDI ARABIA</option>
+                                
+                                    <option value="SEN">SENEGAL</option>
+                                
+                                    <option value="SRB">SERBIA</option>
+                                
+                                    <option value="SYC">SEYCHELLES</option>
+                                
+                                    <option value="SLE">SIERRA LEONE</option>
+                                
+                                    <option value="SGP">SINGAPORE</option>
+                                
+                                    <option value="SVK">SLOVAKIA</option>
+                                
+                                    <option value="SVN">SLOVENIA</option>
+                                
+                                    <option value="SLB">SOLOMON ISLANDS</option>
+                                
+                                    <option value="SOM">SOMALIA</option>
+                                
+                                    <option value="ZAF">SOUTH AFRICA</option>
+                                
+                                    <option value="SGS">SOUTH GEORGIA AND SOUTH SANDWICH ISLANDS</option>
+                                
+                                    <option value="SSD">SOUTH SUDAN</option>
+                                
+                                    <option value="XOM">SOVEREIGN MILITARY ORDER OF MALTA</option>
+                                
+                                    <option value="ESP">SPAIN</option>
+                                
+                                    <option value="LKA">SRI LANKA</option>
+                                
+                                    <option value="XXA">STATELESS</option>
+                                
+                                    <option value="SDN">SUDAN</option>
+                                
+                                    <option value="SUR">SURINAME</option>
+                                
+                                    <option value="SJM">SVALBARD AND JAN MAYEN ISLANDS</option>
+                                
+                                    <option value="SWZ">SWAZILAND</option>
+                                
+                                    <option value="SWE">SWEDEN</option>
+                                
+                                    <option value="CHE">SWITZERLAND</option>
+                                
+                                    <option value="SYR">SYRIAN ARAB REPUBLIC</option>
+                                
+                                    <option value="TWN">TAIWAN</option>
+                                
+                                    <option value="TJK">TAJIKISTAN</option>
+                                
+                                    <option value="TZA">TANZANIA</option>
+                                
+                                    <option value="THA">THAILAND</option>
+                                
+                                    <option value="TBT">TIBET</option>
+                                
+                                    <option value="TGO">TOGO</option>
+                                
+                                    <option value="TKL">TOKELAU</option>
+                                
+                                    <option value="TON">TONGA</option>
+                                
+                                    <option value="TTO">TRINIDAD AND TOBAGO</option>
+                                
+                                    <option value="TUN">TUNISIA</option>
+                                
+                                    <option value="TUR">TURKEY</option>
+                                
+                                    <option value="TKM">TURKMENISTAN</option>
+                                
+                                    <option value="TCA">TURKS AND CAICOS ISL</option>
+                                
+                                    <option value="TUV">TUVALU</option>
+                                
+                                    <option value="UGA">UGANDA</option>
+                                
+                                    <option value="GBD">UK BRITISH DEPENDENT TERRITORIES CITIZEN</option>
+                                
+                                    <option value="GBN">UK BRITISH NATIONAL(OVERSEES)</option>
+                                
+                                    <option value="GBO">UK BRITISH OVERSEES CITIZEN</option>
+                                
+                                    <option value="GBP">UK BRITISH PROTECTED PERSON</option>
+                                
+                                    <option value="GBS">UK BRITISH SUBJECT</option>
+                                
+                                    <option value="UKR">UKRAINE</option>
+                                
+                                    <option value="ARE">UNITED ARAB EMIRATES</option>
+                                
+                                    <option value="GBR">UNITED KINGDOM</option>
+                                
+                                    <option value="UNO">UNITED NATIONS ORGANIZATION</option>
+                                
+                                    <option value="UNA">UNITED NATIONS SPECIALIZED AGENCY</option>
+                                
+                                    <option value="UMI">UNITED STATES MINOR OUTLYING ISLANDS</option>
+                                
+                                    <option value="USA">UNITED STATES OF AMERICA</option>
+                                
+                                    <option value="URY">URUGUAY</option>
+                                
+                                    <option value="UZB">UZBEKISTAN</option>
+                                
+                                    <option value="VUT">VANUATU</option>
+                                
+                                    <option value="VAT">VATICAN CITY STATE ( HOLY SEE)</option>
+                                
+                                    <option value="VEN">VENEZUELA</option>
+                                
+                                    <option value="VNM">VIETNAM</option>
+                                
+                                    <option value="VGB">VIRGIN ISLANDS (BRITISH)</option>
+                                
+                                    <option value="VIR">VIRGIN ISLANDS (US)</option>
+                                
+                                    <option value="WLF">WALLIS AND FUTUNA ISLANDS</option>
+                                
+                                    <option value="ESH">WESTERN SAHARA</option>
+                                
+                                    <option value="YEM">YEMEN</option>
+                                
+                                    <option value="YUG">YUGOSLAVIA</option>
+                                
+                                    <option value="ZMB">ZAMBIA</option>
+                                
+                                    <option value="ZWE">ZIMBABWE</option>
+                                
+                            </select><div class="chosen-container chosen-container-multi" title="" id="country_visited_chosen" style="width: 245px;"><ul class="chosen-choices">
+  <li class="search-field">
+    <input class="chosen-search-input default" type="text" autocomplete="off" value="Select countries.." tabindex="4" style="width: 124.719px;">
+  </li>
+</ul>
+<div class="chosen-drop">
+  <ul class="chosen-results"></ul>
+</div></div>
+                        </div>
+                        <div class="col-33">
+                        If information furnished is found to be incorrect at the time of entry or anytime during stay in India, you will be refused entry.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11">SAARC Country Visit Details</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-312">Have you visited SAARC countries (except your own country) during last 3 years?
+                            <input type="radio" id="saarc_flag1" style="width:auto;border: none" value="YES" name="appl.saarc_flag" onclick="$(&#39;.all_saarc_rows&#39;).css(&#39;display&#39;, &#39;block&#39;);
+                                    add_saarc_row_first();">Yes
+                            <input type="radio" id="saarc_flag2" style="width:auto;border: none" value="NO" name="appl.saarc_flag" onclick="add_saarc_rows();">No
+                            </div>
+                            <div class="col-33">Have you visited "South Asian Association for Regional Cooperation" (SAARC) countries (except your own country) during last 3 years? Yes /No</div>
+                        </div>
+                        <div class="all_saarc_rows" style="display:none">
+                            <div class="row">
+                                <div class="col-3a text-bold mandatory">Name of SAARC country</div>
+                                <div class="col-3b text-bold mandatory">Year</div>
+                                <div class="col-3c text-bold mandatory">No. of visits</div>
+                                <div class="col-3d">
+                                    <input type="button" class="plusButton" onclick="add_saarc_rows()" style="vertical-align:text-bottom;border:none;margin-top: 2px;margin-bottom: 2px;display:inline-block;">
+                                    <input type="button" class="minusButton" onclick="delete_saarc_rows()" style="vertical-align:text-bottom;border:none;margin-top: 2px;margin-bottom: 2px;display:inline-block;">
+                                    <div class="col-33"></div>
+                                </div>
+                                <div class="col-33"></div>
+                                <input type="hidden" name="appl.saarcFieldsFilled" id="saarcFieldsFilled">
+                            
+                                <div class="row" id="saarc_row1" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry1">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear1">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo1" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row2" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry2">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear2">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo2" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row3" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry3">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear3">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo3" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row4" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry4">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear4">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo4" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row5" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry5">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear5">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo5" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row6" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry6">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear6">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo6" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row7" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry7">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear7">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo7" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                                <div class="row" id="saarc_row8" style="display:none">
+                                    <div class="col-3a">
+                                        
+                                        <select name="appl.saarcCountry" class="saarcCountry" id="saarcCountry8">
+                                            <option value="">Select country</option>
+                                            
+                                                <option value="AFG">AFGHANISTAN</option>
+                                            
+                                                <option value="BTN">BHUTAN</option>
+                                            
+                                                <option value="PAK">PAKISTAN</option>
+                                            
+                                                <option value="MDV">MALDIVES</option>
+                                            
+                                                <option value="BGD">BANGLADESH</option>
+                                            
+                                                <option value="LKA">SRI LANKA</option>
+                                            
+                                                <option value="NPL">NEPAL</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3b">
+                                        
+                                        <select name="appl.saarcYear" class="saarcYear" id="saarcYear8">
+                                            <option value="">Select year</option>
+                                            
+                                                <option value="2019">2019</option>
+                                            
+                                                <option value="2018">2018</option>
+                                            
+                                                <option value="2017">2017</option>
+                                            
+                                                <option value="2016">2016</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div class="col-3c">
+                                        <input name="appl.saarcVisitNo" type="text" id="saarcVisitNo8" class="saarcVisitNo" value="" maxlength="3">
+                                    </div>
+                                    <div class="col-3d">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                    <div class="col-33">Please provide data</div>
+                                </div>
+                            
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-11">Reference</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Reference Name in India</div>
+                        <div class="col-32"><input name="appl.nameofsponsor_ind" value="" type="text" maxlength="50" id="nameofsponsor_ind">   </div>
+                        <div class="col-33">Reference Name and Address in India </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Address</div>
+                        <div class="col-32"><input name="appl.add1ofsponsor_ind" value="" type="text" maxlength="35" id="add1ofsponsor_ind">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31"></div>
+                        <div class="col-32"><input name="appl.add2ofsponsor_ind" value="" type="text" maxlength="35" id="add2ofsponsor_ind">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Phone</div>
+                        <div class="col-32"><input name="appl.phoneofsponsor_ind" value="" type="text" maxlength="15" id="phoneofsponsor_ind">   </div>
+                        <div class="col-33">Phone no</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Reference Name in ARGENTINA</div>
+                        <div class="col-32"><input name="appl.nameofsponsor_msn" value="" type="text" maxlength="50" id="nameofsponsor_msn">   </div>
+                        <div class="col-33">Please mention one contact details in Home Country to be contacted in case of emergency</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Address</div>
+                        <div class="col-32"><input name="appl.add1ofsponsor_msn" value="" type="text" maxlength="35" id="add1ofsponsor_msn">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31"></div>
+                        <div class="col-32"><input name="appl.add2ofsponsor_msn" value="" type="text" maxlength="35" id="add2ofsponsor_msn">   </div>
+                        <div class="col-33"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-31 mandatory">Phone</div>
+                        <div class="col-32"><input name="appl.phoneofsponsor_msn" value="" type="text" maxlength="15" id="phoneofsponsor_msn">   </div>
+                        <div class="col-33">Phone no</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-11 text_center">
+
+                            <input type="hidden" name="appl.browser_code" id="browser_code" value="Mozilla">
+                            <input type="hidden" name="appl.browser_name" id="browser_name" value="Netscape">
+                            <input type="hidden" name="appl.browser_ver" id="browser_ver" value="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36">                        
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="continue" value="Save and Continue">
+                            <input name="submit_btn" type="submit" class="btn btn-primary" id="exit" value="Save and Temporarily Exit" title="Save and Register Later">
+
+                        </div>
+                    </div>
+
+
+                </div><!-- end of wrapper -->
+            </div>
+            <input type="hidden" name="token" value="e288f53f-3e46-47d6-8ee0-fcafdbe9bb13">
+        </form>
+    
+    <script>
+
+        if (document.getElementById('VTissuedt') != undefined) {
+            $(function () {
+                $("#VTissuedt").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "-40:+0",
+                    showAnim: 'slide',
+                    minDate: $("#dob").val(),
+                    onClose: function (dateText, inst) {
+                        // alert("datepicker clsing value = "+$('#app_dob').val());
+                        if (Browser.Version() >= 9) {
+                            $('#VTissuedt').val(changeDate($('#VTissuedt').val()));
+                            var result = validate_visaIssueDate($('#VTissuedt').val().trim(), 1);
+                            if (result != "true")
+                                errorify($('#VTissuedt'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#VTissuedt'), "In dd/mm/yyyy format");
+                            }
+                        }
+
+                    }
+                });
+            });
+
+        }
+
+
+        if (document.getElementById('dtofEvent') != undefined) {
+            $(function () {
+                $("#dtofEvent").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "-0:+10",
+                    showAnim: 'slide',
+                    minDate: $("#dob").val(),
+                    onClose: function (dateText, inst) {
+                        // alert("datepicker clsing value = "+$('#app_dob').val());
+                        if (Browser.Version() >= 9) {
+                            $('#dtofEvent').val(changeDate($('#dtofEvent').val()));
+                            var result = validate_event_date($('#dtofEvent').val().trim(), 1);
+                            if (result != "true")
+                                errorify($('#dtofEvent'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#dtofEvent'), "In dd/mm/yyyy format");
+                            }
+                        }
+
+                    }
+                });
+            });
+
+        }
+
+
+        if (document.getElementById('VTexpirydt') != undefined) {
+            $(function () {
+                $("#VTexpirydt").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "0:+40",
+                    showAnim: 'slide',
+                    minDate: $("#VTissuedt").val(),
+                    onClose: function (dateText, inst) {
+
+                        if (Browser.Version() >= 9) {
+                            $('#VTexpirydt').val(changeDate($('#VTexpirydt').val()));
+                            var result = validate_visaExpiryDate($('#VTexpirydt').val().trim(), 1);
+                            if (result != "true")
+                                errorify($('#VTexpirydt'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#VTexpirydt'));
+                            }
+                        }
+
+                    }
+                });
+            });
+
+        }
+        if (document.getElementById('oldvisaissuedate') != undefined) {
+            $(function () {
+                $("#oldvisaissuedate").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    yearRange: "-40:+0",
+                    showAnim: 'slide',
+                    onClose: function (dateText, inst) {
+                        // alert("datepicker clsing value = "+$('#app_dob').val());
+                        if (Browser.Version() >= 9) {
+                            $('#oldvisaissuedate').val(changeDate($('#oldvisaissuedate').val()));
+                            var result = validate_visaIssueDate($('#oldvisaissuedate').val().trim(), 1);
+                            if (result != "true")
+                                errorify($('#oldvisaissuedate'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#oldvisaissuedate'), "In dd/mm/yyyy format");
+                            }
+                        }
+
+                    }
+                });
+            });
+
+        }
+
+        if (document.getElementById('jouryney_id') != undefined) {
+            $(function () {
+                $("#jouryney_id").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "dd/mm/yy",
+                    maxDate: "+124d",
+                    minDate: "+4d",
+                    showAnim: 'slide',
+                    onClose: function (dateText, inst) {
+                        // alert("datepicker clsing value = "+$('#app_dob').val());
+                        if (Browser.Version() >= 9) {
+                            //$('#app_placeOfBirth').focus();
+                            $('#jouryney_id').val(changeDate($('#jouryney_id').val()));//dateLessThanYdays(value,y)
+                            var result = validate_journeydate($('#jouryney_id').val(), 1,3);
+                            if (result != "true")
+                                errorify($('#jouryney_id'), result);
+                            //$('#dob_id').parent().next().empty().addClass("error1").append(result);
+                            else {
+                                correctify($('#jouryney_id'), "Please enter expected arrival date");
+                            }
+                        }
+
+                    }
+                });
+
+            });
+
+
+
+        }
+        function findmindate()
+        {
+            var ser_req = '3';
+            var req_type = ParseInt(ser_req);
+            var mindate = "+0d";
+            if (req_type == 3 || req_type == "3")
+                mindate = "+4d";
+            return mindate;
+        }
+        function findmaxdate()
+        {
+            var ser_req = '3';
+            var req_type = ParseInt(ser_req);
+            var maxdate = "+200d";
+            if (req_type == 3 || req_type == "3")
+                maxdate = "+34d";
+            return maxdate;
+        }
+        function fetchDistrictList(state_name, dis_id) {
+
+            var state_name_var = state_name;
+            // Send the data using post
+            $.ajax({
+                type: "POST",
+                url: "json/fetchDistrictList",
+                dataType: "json",
+                data: {countrycode: 'IND', statename: state_name_var},
+                success: function (data) {
+
+                    var innertext = "<option value=''>Select district</option>";
+                    for (var i = 0; i < data['districtList'].length; i++) {
+                        innertext = innertext + "<option value='" + data['districtList'][i].disname + "'>" + data['districtList'][i].disname + "</option>";
+                    }
+
+                    dis_id.prop('disabled', false);
+
+                    dis_id.html(innertext);
+
+                }
+            })
+                    .done(function (data) {
+                    })
+                    .fail(function () {
+                        // alert("error");
+                    })
+                    .always(function () {
+                    });
+        }
+
+
+
+    </script>
+
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body></html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://indianvisaonline.gov.in/evisa/DocumentUpload -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+        <title>Indian e-Visa</title>
+
+<noscript>
+<meta http-equiv="refresh" content="0; URL=no_js.html">
+</noscript>
+
+<!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://localhost:8084/evisa/js/ https://localhost:8084/evisa/css/ , img-src 'self' data:;"/>
+-->
+
+
+<meta http-equiv="X-Frame-Options" content="deny">
+<meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+<script type="text/javascript" src="./Indian e-Visa_files/jquery.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/jquery-ui.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/declarations.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/blur_functions.js"></script>
+<script type="text/javascript" src="./Indian e-Visa_files/submit_functions.js"></script>
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/Online_tvoa.css">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery_theme_tvoa.css">
+<link rel="icon" href="https://indianvisaonline.gov.in/evisa/images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./Indian e-Visa_files/jquery-ui.css">
+
+
+        
+        
+        <script>
+            $(document).ready(function() {
+            
+                
+                 if (window.File && window.FileReader && window.FileList && window.Blob) {
+                 $('.mFile_class').bind('change', function() {
+                 
+                 var myfile = $(this).val();
+                 
+                 var mysplit = myfile.split('.');
+                 var len = mysplit.length;
+                 var ext = mysplit[len - 1];
+                 ext = ext.toLowerCase();
+                 if (ext == 'pdf' || ext == 'PDF')
+                 {
+                 //return true;
+                 correctify_image($(this), "");
+                 $(this).next().removeAttr('disabled');
+                 $('#continue').removeAttr('disabled');
+                 }
+                 else
+                 {
+                 errorify_image($(this), "Only PDF files can be uploaded. Please try again.");
+                 $(this).val('');
+                 $(this).next().attr('disabled', 'disabled');
+                 $('#continue').attr('disabled', 'disabled');
+                 return false;
+                 }
+                 
+                 
+                 if (this.files[0].size > 300000) {
+                 errorify_image($(this), "Document size exceeds 300KB.Please upload file smaller than 300KB.");
+                 $(this).next().attr('disabled', 'disabled');
+                 $('#continue').attr('disabled', 'disabled');
+                 } else if (this.files[0].size < 10000) {
+                 errorify_image($(this), "Document size must be greater than 10KB");
+                 $(this).next().attr('disabled', 'disabled');
+                 $('#continue').attr('disabled', 'disabled');
+                 }
+                 else {
+                 correctify_image($(this), "");
+                 $(this).next().removeAttr('disabled');
+                 $('#continue').removeAttr('disabled');
+                 }
+                 });
+                 }
+            });
+
+            window.onload = function() {
+                document.onkeydown = function(e) {
+                    return (e.which || e.keyCode) != 116;
+                }
+            }
+
+        </script>
+        <style>
+            .docs_list{
+                margin-top:20px;
+            }
+            .docs_list>div.col-31{
+                text-align: left;
+                width:40%; font-size: 1em;
+                margin-top:10px; padding:0;
+                padding-left:2px;
+            }
+            .docs_list>div.col-32{
+                text-align: left;
+                width:33%; font-size: 1em;
+                padding:0;
+            }
+            .docs_list>div.col-33{
+                text-align: left;
+                width:20%; padding:0;
+                margin-top:-10px; font-size: 1em;
+            }
+
+            .docs_list>div.not_uploaded{
+                color:#840B0B;
+                font-weight: bold;
+            }
+            div.col-32 input.btn{
+                padding: 1px;
+                margin-top: -10px;
+                font-size: 1em;
+            }
+            .text_uploaded_class{
+                color:#0DA319;font-weight: bold;
+            }
+            .text_notuploaded_class{
+                color:#CE351A;font-weight: bold;
+            }
+
+        </style>
+        <script>
+
+            function validate_document_upload() {
+               
+                var val_clicked = $("input[type=submit][clicked=true]").val();
+                val_clicked = val_clicked.toLowerCase();
+                if (val_clicked == "upload document" || val_clicked == "Re-upload") {
+                    if ($('#doc_id').val() == "") {
+                        alert("Please select a document to upload");
+                        return false;
+                    }
+                }
+                else if (val_clicked == "confirm") {
+                    var required_doc_list_size = get_pending_doc_no();
+                    if (required_doc_list_size != "null" && required_doc_list_size >= 1) {
+                        alert("Please upload all the required documents");
+                        return false;
+                    }
+                    else if (document.getElementById("verifyDoc").checked == false) {
+                        document.getElementById("verifyDoc").focus();
+                        alert("Please click the checkbox to continue.");
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function get_pending_doc_no() {
+                var pending_doc = 0;
+            
+                
+                pending_doc++;
+                
+            
+                return pending_doc;
+            }
+        </script>
+    </head>
+    <body onload="backButtonOverride()">
+        <form method="post" action="https://indianvisaonline.gov.in/evisa/DocumentUpload" autocomplete="off" enctype="multipart/form-data" onsubmit="return validate_document_upload();">
+            <div class="wrapper">
+                <div class="pageHeader"></div> 
+                <div class="pageHeading1 text_center">
+                    Document Upload     
+                    <a href="https://indianvisaonline.gov.in/evisa/tvoa.html"><img align="right" src="./Indian e-Visa_files/home.png" style=" width: 30px; height:26px;"></a>
+                </div>                
+                <div class="container">                          
+
+                    <div class="row text_center" style="font-size:14px;color:#3873E0;font-weight: bold">
+                        Document to be uploaded for Temporary Application Id:-<span class="red_heading text_bold">5X3AA858WBUSARB</span>  
+                    </div>                 
+
+                    <div class="row docs_list">
+                        <div class="col-31 text-bold">Document description</div>
+                        <div class="col-32 text-bold"></div>
+                        <div class="col-33 text-bold">Status</div>
+                    </div>                       
+
+                    
+                        <div class="row docs_list">
+                            <div class="col-31">1) Copy of Passport page containing personal particulars
+                                
+                            </div>
+                            <div class="col-32">
+                                
+                                    
+    
+    <input type="file" name="mFile" id="mFile_1" class="mFile_class" onclick="$(&#39;#doc_id&#39;).val(1)">
+
+
+
+                                    <input type="submit" class="btn btn-primary" name="submit_btn" value="Upload Document" onclick="$(&#39;#doc_id&#39;).val(&#39;1&#39;)">
+
+                                
+                                
+                            </div>
+                            <div class="col-33">
+                                
+                                    <span class="text_notuploaded_class">Not Uploaded</span>
+                                
+                                
+                            </div>
+                            </div>
+                            <div class="error_display"></div>
+                                       
+                    
+
+
+                    <div class="row text_bold" style="padding-left:20px;"> <br><br>
+                        Kindly ensure that the document is as per specifications mentioned below.
+                        <ul class="instructions_ul text_bold">
+                            <li class="text_important">All documents uploaded by the applicant including business cards,invitation letters etc. must be in English language, failing which e-Visa application would be liable for rejection.
+                            </li>
+                            <li>
+                                Format  PDF 
+                            </li>
+                            <li>
+                                Size  Minimum 10 KB
+                            </li>
+                            <li>
+                                Maximum 300 KB
+                            </li>
+                            <li>
+                                Passport Upload- Photo page of Passport containing personal details like name,date of birth, nationality , expiry date etc. to be uploaded by the applicant.                                            
+                            </li>
+                            <li class="text_important">
+                                Photo page of Passport uploaded should be of the same passport whose details are provided in Passport Details section.                                            
+                            </li>
+                            <li class="text_important">
+                                The application is liable to be rejected if the uploaded document is not clear and as per specification. 
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row" style="text-align:center">
+                        <input type="checkbox" id="verifyDoc" style="width:auto;text-align: center;"> 
+                        I have verified that all the documents are uploaded as per the requirement.<br>
+                        <input name="submit_btn" type="submit" class="btn btn-primary" id="continue" value="Confirm"><br>
+                    </div>
+                    <div style="text-align: center;font-weight: bold;color:#C61919">
+                        
+                    </div>      
+                </div>
+                <input type="hidden" name="document_id" id="doc_id" value="">
+                <input type="hidden" name="token" value="136cab53-f8b1-404a-a15b-fb006bdab003">
+            </div> <!--end of wrapper-->                            
+        </form>
+    
+
+</body></html>
